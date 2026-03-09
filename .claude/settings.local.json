@@ -58,7 +58,9 @@
       "Bash(winget install GitHub.cli)",
       "Bash(npm run build 2)",
       "Bash(1)",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "Bash(npm install react react-dom --save)",
+      "Bash(npm install @astrojs/react --save-dev)"
     ]
   }
 }

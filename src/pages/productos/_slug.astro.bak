@@ -1,0 +1,487 @@
+---
+// src/pages/productos/[slug].astro
+// Template de página de producto con HTML semántico y SEO optimizado
+
+// Importar datos de productos (será conectado a Directus en Fase 2)
+const { slug } = Astro.params;
+
+// Mock data - Reemplazar con fetch de Directus API
+const product = {
+  id: "1",
+  slug: "beta-alanina-2400",
+  name: "BETA ALANINA 2400 MG",
+  price: 29990,
+  currency: "CLP",
+  image: "https://tienda.pure24nutrition.cl/images/beta-alanina.jpg",
+  imageAlt: "Beta Alanina 2400mg Pure 24 Nutrition presentación frente",
+  description: "Suplemento de beta-alanina de alta pureza (99.5%) para resistencia muscular y rendimiento deportivo",
+  category: "Aminoácidos",
+  sku: "BETA-ALANINA-2400",
+  stock: 100,
+  gtin13: "7798123456789",
+  ingredients: "Beta-alanina 99.5% pureza",
+  servings: 80,
+  servingSize: "3g"
+};
+
+const currentUrl = `https://pure24nutrition.cl/productos/${slug}`;
+const organizationName = "Pure 24 Nutrition";
+const organizationAddress = "Santiago, Chile";
+const organizationPhone = "+56 9 XXXX XXXX";
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Meta tags básicos -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="language" content="Spanish">
+
+  <!-- SEO: Title y Description -->
+  <title>{product.name} | Pure 24 Nutrition - Suplementos Deportivos Chile</title>
+  <meta name="description" content={`${product.name}. ${product.description.substring(0, 150)}. Compra online en Pure 24 Nutrition. Envío a todo Chile.`}>
+  <meta name="keywords" content={`${product.name}, ${product.category}, suplementos, Pure 24, Chile`}>
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href={currentUrl}>
+
+  <!-- Open Graph para redes sociales -->
+  <meta property="og:type" content="product">
+  <meta property="og:title" content={product.name}>
+  <meta property="og:description" content={product.description}>
+  <meta property="og:image" content={product.image}>
+  <meta property="og:image:alt" content={product.imageAlt}>
+  <meta property="og:url" content={currentUrl}>
+  <meta property="og:site_name" content={organizationName}>
+  <meta property="og:locale" content="es_CL">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="product">
+  <meta name="twitter:title" content={product.name}>
+  <meta name="twitter:description" content={product.description}>
+  <meta name="twitter:image" content={product.image}>
+
+  <!-- Schema.org: Product -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "{product.name}",
+    "image": "{product.image}",
+    "description": "{product.description}",
+    "sku": "{product.sku}",
+    "gtin13": "{product.gtin13}",
+    "brand": {
+      "@type": "Brand",
+      "name": "Pure 24 Nutrition"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "{currentUrl}",
+      "priceCurrency": "{product.currency}",
+      "price": "{product.price}",
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "Pure 24 Nutrition"
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "127"
+    }
+  }
+  </script>
+
+  <!-- Schema.org: Organization (NAP exacto) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Pure 24 Nutrition",
+    "url": "https://pure24nutrition.cl",
+    "logo": "https://pure24nutrition.cl/logo.png",
+    "description": "Tienda online de suplementos deportivos de alta calidad en Chile",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Santiago",
+      "addressRegion": "Metropolitana",
+      "addressCountry": "CL"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "telephone": "+56 9 XXXX XXXX",
+      "email": "info@pure24nutrition.cl"
+    },
+    "sameAs": [
+      "https://www.instagram.com/pure24nutrition",
+      "https://www.facebook.com/pure24nutrition"
+    ]
+  }
+  </script>
+
+  <!-- Schema.org: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://pure24nutrition.cl"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Productos",
+        "item": "https://pure24nutrition.cl/productos"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "{product.category}",
+        "item": "https://pure24nutrition.cl/productos?categoria={product.category}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "{product.name}",
+        "item": "{currentUrl}"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Estilos (conectar a design tokens) -->
+  <style>
+    :root {
+      --color-primary: #1ABC9C;
+      --color-primary-dark: #16A085;
+      --color-secondary: #1A2B4A;
+      --color-neutral-dark: #333333;
+      --color-neutral-light: #F5F5F5;
+      --color-white: #FFFFFF;
+      --font-display: "Playfair Display", Georgia, serif;
+      --font-body: "Inter", system-ui, -apple-system, sans-serif;
+      --spacing-base: 1rem;
+      --radius-md: 0.5rem;
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-neutral-dark);
+      line-height: 1.5;
+      background-color: var(--color-neutral-light);
+    }
+
+    nav {
+      background-color: var(--color-secondary);
+      color: var(--color-white);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--spacing-base);
+    }
+
+    article {
+      background-color: var(--color-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    header {
+      padding: 2rem;
+      border-bottom: 1px solid var(--color-neutral-light);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--color-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: 1.875rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      margin: 2rem 0 1rem 0;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--color-neutral-dark);
+      margin: 1.5rem 0 0.75rem 0;
+    }
+
+    section {
+      padding: 2rem;
+      border-bottom: 1px solid var(--color-neutral-light);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      border: none;
+      padding: 0.875rem 2rem;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 200ms ease-out;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(26, 188, 156, 0.3);
+    }
+
+    .btn-primary:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin: 1rem 0;
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: #D4F1F4;
+      color: #16A085;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background-color: var(--color-secondary);
+      color: var(--color-white);
+      padding: 2rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    footer address {
+      font-style: normal;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.875rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      section {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVEGACIÓN -->
+  <nav aria-label="Navegación principal">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+      <a href="/" style="color: white; text-decoration: none; font-weight: 600;">Pure 24 Nutrition</a>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>
+    <article itemscope itemtype="https://schema.org/Product">
+      <!-- HEADER: PRODUCTO Y IMAGEN -->
+      <header>
+        <span class="badge" aria-label={`Categoría: ${product.category}`}>{product.category}</span>
+        <h1 itemprop="name">{product.name}</h1>
+
+        <img
+          src={product.image}
+          alt={product.imageAlt}
+          itemprop="image"
+          loading="lazy"
+          width="600"
+          height="600"
+        >
+
+        <p itemprop="description">{product.description}</p>
+
+        <div class="price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <span itemprop="priceCurrency" content={product.currency}></span>
+          <span itemprop="price" content={product.price}>${product.price.toLocaleString('es-CL')}</span>
+          <link itemprop="url" href={currentUrl}>
+          <link itemprop="availability" href="https://schema.org/InStock">
+        </div>
+      </header>
+
+      <!-- SECCIÓN 1: ESPECIFICACIONES TÉCNICAS -->
+      <section id="specs" aria-labelledby="specs-heading">
+        <h2 id="specs-heading">Especificaciones Técnicas</h2>
+
+        <h3>Información General</h3>
+        <table role="presentation" style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+          <tr>
+            <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-neutral-light); font-weight: 600;">SKU</td>
+            <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-neutral-light);" itemprop="sku">{product.sku}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-neutral-light); font-weight: 600;">Categoría</td>
+            <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-neutral-light);">{product.category}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-neutral-light); font-weight: 600;">Presentación</td>
+            <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-neutral-light);">{product.servings} servicios</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-neutral-light); font-weight: 600;">Dosis por Servicio</td>
+            <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-neutral-light);">{product.servingSize}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.5rem; font-weight: 600;">Ingredientes Principales</td>
+            <td style="padding: 0.5rem;" itemprop="ingredients">{product.ingredients}</td>
+          </tr>
+        </table>
+      </section>
+
+      <!-- SECCIÓN 2: BENEFICIOS -->
+      <section id="benefits" aria-labelledby="benefits-heading">
+        <h2 id="benefits-heading">Beneficios Principales</h2>
+        <ul style="list-style: none; padding-left: 0;">
+          <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative;">
+            <span style="position: absolute; left: 0; color: var(--color-primary); font-weight: 700;">✓</span>
+            [BENEFICIO 1: Reemplazar con texto real]
+          </li>
+          <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative;">
+            <span style="position: absolute; left: 0; color: var(--color-primary); font-weight: 700;">✓</span>
+            [BENEFICIO 2: Reemplazar con texto real]
+          </li>
+          <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative;">
+            <span style="position: absolute; left: 0; color: var(--color-primary); font-weight: 700;">✓</span>
+            [BENEFICIO 3: Reemplazar con texto real]
+          </li>
+        </ul>
+      </section>
+
+      <!-- SECCIÓN 3: MODO DE USO -->
+      <section id="usage" aria-labelledby="usage-heading">
+        <h2 id="usage-heading">Modo de Uso</h2>
+        <h3>Dosis Recomendada</h3>
+        <p>[INSTRUCCIONES DETALLADAS DE USO: Reemplazar con texto real]</p>
+        <h3>Advertencias</h3>
+        <ul style="list-style: disc; padding-left: 1.5rem;">
+          <li>[ADVERTENCIA 1: Reemplazar con texto real]</li>
+          <li>[ADVERTENCIA 2: Reemplazar con texto real]</li>
+        </ul>
+      </section>
+
+      <!-- SECCIÓN 4: PREGUNTAS FRECUENTES -->
+      <section id="faq" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">Preguntas Frecuentes</h2>
+
+        <details style="margin-bottom: 1rem;">
+          <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem; background-color: var(--color-neutral-light); border-radius: var(--radius-md);">
+            ¿Cuáles son los ingredientes principales?
+          </summary>
+          <p style="padding: 1rem 0;">
+            [RESPUESTA: Listar ingredientes principales]
+          </p>
+        </details>
+
+        <details style="margin-bottom: 1rem;">
+          <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem; background-color: var(--color-neutral-light); border-radius: var(--radius-md);">
+            ¿Es seguro para todos?
+          </summary>
+          <p style="padding: 1rem 0;">
+            [RESPUESTA: Contraindicaciones y grupos especiales]
+          </p>
+        </details>
+
+        <details style="margin-bottom: 1rem;">
+          <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem; background-color: var(--color-neutral-light); border-radius: var(--radius-md);">
+            ¿Cuál es el tiempo de entrega?
+          </summary>
+          <p style="padding: 1rem 0;">
+            [RESPUESTA: Opciones de envío y tiempos]
+          </p>
+        </details>
+      </section>
+
+      <!-- SECCIÓN 5: COMPRA -->
+      <section id="buy" aria-labelledby="buy-heading">
+        <h2 id="buy-heading">Hacer Compra</h2>
+        <p style="margin-bottom: 1.5rem;">Haz tu pedido ahora y recibe tu producto directamente en casa.</p>
+        <button class="btn-primary" aria-label={`Agregar ${product.name} al carrito`}>
+          Comprar Ahora • ${product.price.toLocaleString('es-CL')}
+        </button>
+      </section>
+
+      <!-- SECCIÓN 6: INFORMACIÓN ADICIONAL -->
+      <section id="info" aria-labelledby="info-heading">
+        <h2 id="info-heading">Información Adicional</h2>
+        <h3>Certificaciones y Garantía</h3>
+        <p>[CERTIFICACIONES: Reemplazar con información real]</p>
+        <h3>Código GTIN</h3>
+        <p itemprop="gtin13">{product.gtin13}</p>
+      </section>
+    </article>
+  </main>
+
+  <!-- FOOTER: NAP Exacto -->
+  <footer role="contentinfo">
+    <address>
+      <strong>{organizationName}</strong><br>
+      {organizationAddress}<br>
+      Tel: <a href={`tel:${organizationPhone.replace(/\s/g, '')}`} style="color: var(--color-primary);">{organizationPhone}</a><br>
+      Email: <a href="mailto:info@pure24nutrition.cl" style="color: var(--color-primary);">info@pure24nutrition.cl</a>
+    </address>
+    <p style="margin-top: 1rem; font-size: 0.875rem;">
+      &copy; 2026 {organizationName}. Todos los derechos reservados.
+    </p>
+  </footer>
+</body>
+</html>

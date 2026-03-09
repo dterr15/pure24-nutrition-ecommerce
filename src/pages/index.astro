@@ -1,0 +1,434 @@
+---
+// src/pages/index.astro
+// Pure 24 Nutrition - Homepage
+// Astro SSR optimizado para Cloudflare Pages
+import '../styles/main.css';
+import QuoteBait from '../components/QuoteBait.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
+import GeoCircleSchema from '../components/GeoCircleSchema.astro';
+import { recoveryQuoteBait, hydrationQuoteBait, immunityQuoteBait } from '../data/quote-bait';
+
+const siteUrl = 'https://pure24nutrition.cl';
+const pageTitle = 'Pure 24 Nutrition | Suplementación de Grado Farmacéutico | Recuperación, Hidratación e Inmunidad';
+const pageDescription = 'PLACEHOLDER: Meta descripción optimizada para SEO (máximo 160 caracteres sobre propuesta de valor principal)';
+const ogImage = `${siteUrl}/og-image.jpg`;
+
+// Datos de la página (llenar con contenido real)
+const hero = {
+  badge: 'PLACEHOLDER: Categoría o subtítulo',
+  headline: 'PLACEHOLDER: Headline principal (máx 10 palabras)',
+  subheadline: 'PLACEHOLDER: Subheadline de soporte (máx 20 palabras) que articula la propuesta de valor',
+  cta: 'PLACEHOLDER: Texto CTA (ej: "Comenzar a Optimizar")',
+  image: {
+    src: '/images/hero-image.jpg',
+    alt: 'PLACEHOLDER: Descripción de imagen (>5 palabras)',
+    width: 600,
+    height: 400
+  }
+};
+
+const values = [
+  {
+    icon: '/icons/icon-1.svg',
+    iconAlt: 'Icono de validación científica',
+    title: 'PLACEHOLDER: Título Valor 1',
+    description: 'PLACEHOLDER: Descripción del valor 1 (máx 30 palabras)'
+  },
+  {
+    icon: '/icons/icon-2.svg',
+    iconAlt: 'Icono de resultados reales',
+    title: 'PLACEHOLDER: Título Valor 2',
+    description: 'PLACEHOLDER: Descripción del valor 2 (máx 30 palabras)'
+  },
+  {
+    icon: '/icons/icon-3.svg',
+    iconAlt: 'Icono de pureza y calidad',
+    title: 'PLACEHOLDER: Título Valor 3',
+    description: 'PLACEHOLDER: Descripción del valor 3 (máx 30 palabras)'
+  }
+];
+
+const foundation = {
+  headline: 'PLACEHOLDER: "Tu Fundación para la Salud Diaria"',
+  subheadline: 'PLACEHOLDER: Descripción de los tres pilares (máx 25 palabras)',
+  pillars: [
+    {
+      title: 'PLACEHOLDER: Pilar 1',
+      description: 'PLACEHOLDER: Descripción detallada del pilar 1 (máx 30 palabras)'
+    },
+    {
+      title: 'PLACEHOLDER: Pilar 2',
+      description: 'PLACEHOLDER: Descripción detallada del pilar 2 (máx 30 palabras)'
+    },
+    {
+      title: 'PLACEHOLDER: Pilar 3',
+      description: 'PLACEHOLDER: Descripción detallada del pilar 3 (máx 30 palabras)'
+    }
+  ]
+};
+
+const cta = {
+  headline: 'PLACEHOLDER: Headline secundario (máx 8 palabras)',
+  text: 'PLACEHOLDER: Descripción persuasiva (máx 50 palabras) que justifique por qué el usuario debe actuar ahora',
+  ctaText: 'PLACEHOLDER: Texto CTA (ej: "Explorar Productos")'
+};
+
+const proof = [
+  {
+    label: 'PLACEHOLDER: Label 1',
+    value: 'PLACEHOLDER: Valor/Métrica'
+  },
+  {
+    label: 'PLACEHOLDER: Label 2',
+    value: 'PLACEHOLDER: Valor/Métrica'
+  },
+  {
+    label: 'PLACEHOLDER: Label 3',
+    value: 'PLACEHOLDER: Valor/Métrica'
+  }
+];
+
+const faq = [
+  {
+    question: 'PLACEHOLDER: Pregunta 1',
+    answer: 'PLACEHOLDER: Respuesta 1 (máx 100 palabras)'
+  },
+  {
+    question: 'PLACEHOLDER: Pregunta 2',
+    answer: 'PLACEHOLDER: Respuesta 2 (máx 100 palabras)'
+  },
+  {
+    question: 'PLACEHOLDER: Pregunta 3',
+    answer: 'PLACEHOLDER: Respuesta 3 (máx 100 palabras)'
+  }
+];
+
+const nap = {
+  name: 'Pure 24 Nutrition',
+  address: 'PLACEHOLDER: Dirección exacta, Punta Arenas, Región de Magallanes',
+  phone: 'PLACEHOLDER: +56-9-XXXX-XXXX',
+  email: 'PLACEHOLDER: contacto@pure24nutrition.cl'
+};
+
+// FAQPage Schema
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faq.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- SEO Meta Tags -->
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDescription}>
+  <meta name="keywords" content="PLACEHOLDER: palabras clave separadas por coma">
+  <link rel="canonical" href={siteUrl}>
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={siteUrl}>
+  <meta property="og:title" content="Pure 24 Nutrition | Suplementación Farmacéutica">
+  <meta property="og:description" content={pageDescription}>
+  <meta property="og:image" content={ogImage}>
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content={siteUrl}>
+  <meta name="twitter:title" content="Pure 24 Nutrition | Suplementación Farmacéutica">
+  <meta name="twitter:description" content={pageDescription}>
+  <meta name="twitter:image" content={ogImage}>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Sitemap y Robots -->
+  <link rel="sitemap" href="/sitemap.xml">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+  <!-- Preload crítico -->
+  <link rel="preload" as="image" href="/images/hero-image.jpg">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Pure 24 Nutrition",
+    "url": siteUrl,
+    "logo": `${siteUrl}/logo.svg`,
+    "description": "Suplementación de grado farmacéutico",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Punta Arenas",
+      "addressRegion": "Región de Magallanes",
+      "addressCountry": "CL"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": nap.phone,
+      "contactType": "Customer Support"
+    }
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Pure 24 Nutrition",
+    "image": `${siteUrl}/logo.svg`,
+    "description": "Suplementación de grado farmacéutico para recuperación, hidratación e inmunidad",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Punta Arenas",
+      "addressRegion": "Región de Magallanes",
+      "addressCountry": "CL"
+    },
+    "telephone": nap.phone,
+    "url": siteUrl
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <LocalBusinessSchema />
+  <GeoCircleSchema />
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-to-main">Saltar al contenido principal</a>
+
+  <!-- Header -->
+  <header role="banner" class="header">
+    <nav role="navigation" aria-label="Navegación principal" class="navbar">
+      <div class="navbar-container">
+        <a href="/" class="navbar-logo" aria-label="Pure 24 Nutrition - Inicio">
+          <img src="/logo.svg" alt="Pure 24 Nutrition Logo" width="120" height="40" loading="eager">
+        </a>
+
+        <ul class="navbar-menu" role="menubar">
+          <li role="none"><a href="/" role="menuitem" aria-current="page">Inicio</a></li>
+          <li role="none"><a href="/productos" role="menuitem">Productos</a></li>
+          <li role="none"><a href="/sobre-nosotros" role="menuitem">Sobre Nosotros</a></li>
+          <li role="none"><a href="/contacto" role="menuitem">Contacto</a></li>
+        </ul>
+
+        <button class="btn btn-primary" aria-label="Acceder a la tienda">
+          Acceder a Tienda
+        </button>
+      </div>
+    </nav>
+
+    <div class="banner-info" role="region" aria-label="Información destacada">
+      <p>📍 <strong>PLACEHOLDER:</strong> Información promocional o de envío</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" role="main">
+
+    <!-- Hero Section -->
+    <section class="hero" role="region" aria-label="Sección destacada principal">
+      <div class="hero-container">
+        <div class="badge">{hero.badge}</div>
+        <h1 class="hero-headline">{hero.headline}</h1>
+        <p class="hero-subheadline">{hero.subheadline}</p>
+        <a href="#productos" class="btn btn-primary btn-lg">{hero.cta}</a>
+        <div class="hero-image">
+          <img
+            src={hero.image.src}
+            alt={hero.image.alt}
+            width={hero.image.width}
+            height={hero.image.height}
+            loading="lazy"
+            decoding="async"
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Value Proposition -->
+    <section class="value-proposition" role="region" aria-label="Propuesta de valor principal">
+      <div class="container">
+        <h2 class="section-headline">PLACEHOLDER: Headline de sección</h2>
+        <div class="value-grid">
+          {values.map(value => (
+            <article class="value-card">
+              <div class="value-icon">
+                <img src={value.icon} alt={value.iconAlt} width="48" height="48" loading="lazy">
+              </div>
+              <h3>{value.title}</h3>
+              <p>{value.description}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Foundation -->
+    <section class="foundation" role="region" aria-label="Los tres pilares de nuestra propuesta">
+      <div class="container">
+        <h2 class="section-headline">{foundation.headline}</h2>
+        <p class="section-subheadline">{foundation.subheadline}</p>
+        <div class="foundation-grid">
+          {foundation.pillars.map(pillar => (
+            <div class="foundation-card">
+              <h3>{pillar.title}</h3>
+              <p class="foundation-description">{pillar.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" role="region" aria-label="Llamada a la acción secundaria">
+      <div class="cta-container">
+        <h2 class="cta-headline">{cta.headline}</h2>
+        <p class="cta-text">{cta.text}</p>
+        <a href="#productos" class="btn btn-secondary btn-lg">{cta.ctaText}</a>
+      </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof" role="region" aria-label="Credibilidad y certificaciones">
+      <div class="container">
+        <h2 class="sr-only">Certificaciones y credibilidad</h2>
+        <div class="proof-grid">
+          {proof.map(item => (
+            <div class="proof-item">
+              <p class="proof-label">{item.label}</p>
+              <p class="proof-value">{item.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Quote-Bait: Recovery -->
+    <QuoteBait
+      items={recoveryQuoteBait}
+      title="¿Por qué Pure24 Recovery acelera la recuperación?"
+      section_id="quote-bait-recovery"
+    />
+
+    <!-- Quote-Bait: Hydration -->
+    <QuoteBait
+      items={hydrationQuoteBait}
+      title="¿Cómo funciona la hidratación intracelular con Pure24?"
+      section_id="quote-bait-hydration"
+    />
+
+    <!-- Quote-Bait: Immunity -->
+    <QuoteBait
+      items={immunityQuoteBait}
+      title="¿Cómo fortalece Pure24 la inmunidad?"
+      section_id="quote-bait-immunity"
+    />
+
+    <!-- FAQ -->
+    <section class="faq" role="region" aria-label="Preguntas frecuentes">
+      <div class="container">
+        <h2 class="section-headline">PLACEHOLDER: Preguntas Frecuentes</h2>
+        <div class="faq-list">
+          {faq.map((item, index) => (
+            <details class="faq-item">
+              <summary role="button" aria-expanded="false">
+                <span class="faq-question">{item.question}</span>
+                <span class="faq-icon">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>{item.answer}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer role="contentinfo" class="footer">
+    <div class="footer-container">
+      <nav class="footer-nav" aria-label="Navegación del footer">
+        <div class="footer-column">
+          <h3>Productos</h3>
+          <ul role="list">
+            <li><a href="/productos/recuperacion">Recuperación</a></li>
+            <li><a href="/productos/hidratacion">Hidratación</a></li>
+            <li><a href="/productos/inmunidad">Inmunidad</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Empresa</h3>
+          <ul role="list">
+            <li><a href="/sobre-nosotros">Sobre Nosotros</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contacto">Contacto</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Legal</h3>
+          <ul role="list">
+            <li><a href="/privacidad">Política de Privacidad</a></li>
+            <li><a href="/terminos">Términos de Servicio</a></li>
+            <li><a href="/cookies">Cookies</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <section class="nap" aria-label="Información de contacto">
+        <h2 class="sr-only">Información de contacto</h2>
+        <p><strong>{nap.name}</strong></p>
+        <p>📍 {nap.address}</p>
+        <p>📞 {nap.phone}</p>
+        <p>✉️ {nap.email}</p>
+      </section>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Pure 24 Nutrition. Todos los derechos reservados.</p>
+        <p>Suplementación de grado farmacéutico respaldada por ciencia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Analytics Placeholder -->
+  <!-- PLACEHOLDER: Google Analytics / Plausible / Fathom script -->
+
+  <script>
+    // Smooth scroll behavior (fallback)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+---
+// src/components/GeoCircleSchema.astro
+// FASE 3: LOCAL SEO - Geographic Service Area & Landmark Graph
+
+export interface Props {
+  siteUrl?: string;
+}
+
+const { siteUrl = 'https://pure24nutrition.cl' } = Astro.props;
+
+// Centro: Plaza de Arenas (referencia principal)
+const plazaDeArenas = {
+  latitude: '-53.163700',
+  longitude: '-70.908100'
+};
+
+// Schema: GeoCircle - 15km radius service area
+const geoCircleSchema = {
+  "@context": "https://schema.org",
+  "@type": "GeoCircle",
+  "@id": `${siteUrl}#service-area`,
+  "geoMidpoint": {
+    "@type": "GeoCoordinates",
+    "latitude": plazaDeArenas.latitude,
+    "longitude": plazaDeArenas.longitude
+  },
+  "geoRadius": "15000"
+};
+
+// Schema: ItemList - 5 Landmarks
+const landmarksSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${siteUrl}#landmarks`,
+  "name": "Cobertura de Entregas - Punta Arenas",
+  "description": "5 zonas principales de cobertura en Punta Arenas con entrega garantizada",
+  "numberOfItems": 5,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Plaza de Armas",
+      "url": `${siteUrl}/cobertura/plaza-de-armas`,
+      "description": "Centro histórico y comercial principal",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "-53.163700",
+        "longitude": "-70.908100"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Zona Franca",
+      "url": `${siteUrl}/cobertura/zona-franca`,
+      "description": "Zona comercial y de distribución",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "-53.160500",
+        "longitude": "-70.910200"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Costanera del Estrecho",
+      "url": `${siteUrl}/cobertura/costanera-del-estrecho`,
+      "description": "Paseo turístico y recreativo",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "-53.165200",
+        "longitude": "-70.905000"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "Barrio Norte",
+      "url": `${siteUrl}/cobertura/barrio-norte`,
+      "description": "Zona residencial norte",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "-53.157800",
+        "longitude": "-70.912000"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "name": "Puerto Punta Arenas",
+      "url": `${siteUrl}/cobertura/puerto-punta-arenas`,
+      "description": "Puerto y zona portuaria",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "-53.167500",
+        "longitude": "-70.900000"
+      }
+    }
+  ]
+};
+
+const geoCircleJson = JSON.stringify(geoCircleSchema);
+const landmarksJson = JSON.stringify(landmarksSchema);
+---
+
+<script type="application/ld+json" set:html={geoCircleJson} />
+<script type="application/ld+json" set:html={landmarksJson} />
+
+<script define:vars={{ plazaDeArenas }}>
+  window.SERVICE_AREA = {
+    center: plazaDeArenas,
+    radius: 15000,
+    unit: 'meters'
+  };
+</script>

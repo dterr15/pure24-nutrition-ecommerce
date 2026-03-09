@@ -1,0 +1,71 @@
+---
+// src/components/LocalBusinessSchema.astro
+// FASE 3: LOCAL SEO - NAP sincronizado byte-por-byte desde GBP
+
+export interface Props {
+  siteUrl?: string;
+}
+
+const { siteUrl = 'https://pure24nutrition.cl' } = Astro.props;
+
+// NAP exactos desde Google Business Profile
+const nap = {
+  name: 'Pure24 Nutrition',
+  streetAddress: 'Jorge Montt 934',
+  addressLocality: 'Punta Arenas',
+  addressRegion: 'Región de Magallanes',
+  postalCode: '6200000',
+  addressCountry: 'CL',
+  telephone: '+56 9 7134 5988',
+  latitude: '-53.163700',
+  longitude: '-70.908100'
+};
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": siteUrl,
+  "name": nap.name,
+  "image": `${siteUrl}/logo.svg`,
+  "description": "Suplementación de grado farmacéutico para recuperación acelerada, hidratación sostenida e inmunidad reforzada.",
+  "url": siteUrl,
+  "telephone": nap.telephone,
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": nap.streetAddress,
+    "addressLocality": nap.addressLocality,
+    "addressRegion": nap.addressRegion,
+    "postalCode": nap.postalCode,
+    "addressCountry": nap.addressCountry
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": nap.latitude,
+    "longitude": nap.longitude
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "CL"
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    "opens": "00:00",
+    "closes": "23:59",
+    "comment": "Tienda online 24/7"
+  }
+};
+
+const localBusinessJson = JSON.stringify(localBusinessSchema);
+---
+
+<script type="application/ld+json" set:html={localBusinessJson} />
+
+<meta name="business:name" content={nap.name}>
+<meta name="business:phone" content={nap.telephone}>
+<meta name="business:address" content={`${nap.streetAddress}, ${nap.addressLocality}, ${nap.postalCode}`}>
+<meta name="business:coordinates" content={`${nap.latitude},${nap.longitude}`}>
+
+<script define:vars={{ nap }}>
+  window.BUSINESS_NAP = nap;
+</script>

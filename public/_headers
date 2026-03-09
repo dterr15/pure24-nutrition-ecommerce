@@ -1,0 +1,36 @@
+/* Cache headers para Cloudflare Pages */
+
+/* HTML: Sin caché (siempre servir versión más reciente) */
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/* Assets: Cache máximo 1 año (versiones con hash) */
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/* Imágenes: Cache 30 días */
+/images/*
+  Cache-Control: public, max-age=2592000, immutable
+
+/* Fonts: Cache máximo 1 año */
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/* CSS y JS: Cache 30 días */
+/*.css
+  Cache-Control: public, max-age=2592000, immutable
+/*.js
+  Cache-Control: public, max-age=2592000, immutable
+
+/* Seguridad: Forzar HTTPS */
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+/* Compresión: Brotli automático (habilitado por defecto en Cloudflare) */
+/*
+  Content-Encoding: br

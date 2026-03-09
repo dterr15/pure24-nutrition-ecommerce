@@ -1,0 +1,330 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import ShoppingCart from '../../components/ShoppingCart.tsx';
+import { getProducts } from '../../lib/payload-client';
+
+// Fetch products at build time
+const products = await getProducts();
+
+// Get unique categories for filter
+const categories = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
+---
+
+<Layout title="Catálogo de Productos - Pure24 Nutrition">
+  <main class="productos-page">
+    {/* Header */}
+    <section class="page-header">
+      <div class="container">
+        <h1>Catálogo de Productos</h1>
+        <p class="subtitle">Suplementos dietéticos premium para tu salud y rendimiento</p>
+      </div>
+    </section>
+
+    {/* Cart Icon in Header */}
+    <div class="cart-icon-container">
+      <ShoppingCart client:only="react" />
+    </div>
+
+    {/* Filter Section */}
+    <section class="filters-section">
+      <div class="container">
+        <div class="filters">
+          <div class="filter-group">
+            <label for="category-filter">Categoría</label>
+            <select id="category-filter" class="filter-select">
+              <option value="">Todas las categorías</option>
+              {categories.map(cat => (
+                <option value={cat}>
+                  {cat.replace(/_/g, ' ').toUpperCase()}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="search-filter">Buscar</label>
+            <input
+              id="search-filter"
+              type="text"
+              class="filter-input"
+              placeholder="Buscar por nombre..."
+            />
+          </div>
+
+          <div class="filter-group">
+            <label for="sort-filter">Ordenar por</label>
+            <select id="sort-filter" class="filter-select">
+              <option value="">Relevancia</option>
+              <option value="price-asc">Precio: menor a mayor</option>
+              <option value="price-desc">Precio: mayor a menor</option>
+              <option value="name">Nombre: A-Z</option>
+            </select>
+          </div>
+
+          <button id="reset-filters" class="btn-reset">Resetear filtros</button>
+        </div>
+      </div>
+    </section>
+
+    {/* Products Grid */}
+    <section class="products-section">
+      <div class="container">
+        <div id="products-container">
+          <ProductGrid products={products} columns={4} gap="24px" />
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script define:vars={{ products: JSON.stringify(products) }}>
+  // Client-side filtering and sorting
+  const allProducts = JSON.parse(products);
+  let filteredProducts = [...allProducts];
+
+  const categoryFilter = document.getElementById('category-filter');
+  const searchFilter = document.getElementById('search-filter');
+  const sortFilter = document.getElementById('sort-filter');
+  const resetBtn = document.getElementById('reset-filters');
+  const container = document.getElementById('products-container');
+
+  function applyFilters() {
+    filteredProducts = [...allProducts];
+
+    // Category filter
+    const selectedCategory = categoryFilter.value;
+    if (selectedCategory) {
+      filteredProducts = filteredProducts.filter(p => p.category === selectedCategory);
+    }
+
+    // Search filter
+    const searchTerm = searchFilter.value.toLowerCase();
+    if (searchTerm) {
+      filteredProducts = filteredProducts.filter(p =>
+        p.name.toLowerCase().includes(searchTerm) ||
+        (p.description && p.description.toLowerCase().includes(searchTerm))
+      );
+    }
+
+    // Sort
+    const sortBy = sortFilter.value;
+    if (sortBy === 'price-asc') {
+      filteredProducts.sort((a, b) => (a.price) - (b.price));
+    } else if (sortBy === 'price-desc') {
+      filteredProducts.sort((a, b) => (b.price) - (a.price));
+    } else if (sortBy === 'name') {
+      filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    renderProducts();
+  }
+
+  function renderProducts() {
+    if (filteredProducts.length === 0) {
+      container.innerHTML = '<div class="empty-state"><p>No hay productos que coincidan con tu búsqueda</p></div>';
+      return;
+    }
+
+    // Note: In production, you'd use React or a component library to render
+    // For now, we'll use a simple approach
+    container.innerHTML = `
+      <div class="product-grid" style="--gap: 24px; --columns: 4">
+        ${filteredProducts.map(p => `
+          <div class="product-card" data-product-id="${p.id}">
+            <div class="product-image">
+              ${p.mainImage ? `
+                <img src="${p.mainImage.url}" alt="${p.mainImage.alt || p.name}" loading="lazy" />
+              ` : '<div class="placeholder">Sin imagen</div>'}
+              ${p.discountedPrice && p.discountedPrice < p.price ? `
+                <div class="discount-badge">-${Math.round(((p.price - p.discountedPrice) / p.price) * 100)}%</div>
+              ` : ''}
+            </div>
+            <div class="product-info">
+              <span class="category-label">${p.category?.replace(/_/g, ' ') || ''}</span>
+              <a href="/productos/${p.name.toLowerCase().replace(/\s+/g, '-')}" class="product-name">${p.name}</a>
+              <p class="product-description">${p.description?.substring(0, 80) || ''}...</p>
+              <div class="price-section">
+                ${p.discountedPrice && p.discountedPrice < p.price ? `
+                  <span class="original-price">$${p.price.toLocaleString('es-CL')}</span>
+                  <span class="current-price">$${p.discountedPrice.toLocaleString('es-CL')}</span>
+                ` : `
+                  <span class="current-price">$${p.price.toLocaleString('es-CL')}</span>
+                `}
+              </div>
+              <button class="btn-add-cart" data-product-id="${p.id}" ${p.stock === 0 ? 'disabled' : ''}>
+                ${p.stock === 0 ? 'Agotado' : 'Agregar al carrito'}
+              </button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  categoryFilter?.addEventListener('change', applyFilters);
+  searchFilter?.addEventListener('input', applyFilters);
+  sortFilter?.addEventListener('change', applyFilters);
+  resetBtn?.addEventListener('click', () => {
+    categoryFilter.value = '';
+    searchFilter.value = '';
+    sortFilter.value = '';
+    applyFilters();
+  });
+</script>
+
+<style>
+  .productos-page {
+    min-height: 100vh;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    padding: 60px 20px;
+  }
+
+  .page-header h1 {
+    font-size: 40px;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .cart-icon-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+  }
+
+  /* Filters Section */
+  .filters-section {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 16px;
+    align-items: flex-end;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .filter-select,
+  .filter-input {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+
+  .filter-select:focus,
+  .filter-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .btn-reset {
+    padding: 10px 16px;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .btn-reset:hover {
+    background: #e5e7eb;
+  }
+
+  /* Products Section */
+  .products-section {
+    padding: 40px 20px;
+    background: #f9fafb;
+  }
+
+  #products-container {
+    width: 100%;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--gap, 24px);
+    width: 100%;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    padding: 60px 20px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .filters {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+    }
+
+    .filters-section {
+      padding: 16px;
+    }
+
+    .product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .filters {
+      grid-template-columns: 1fr;
+    }
+
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .cart-icon-container {
+      top: 10px;
+      right: 10px;
+    }
+  }
+</style>

@@ -1,0 +1,406 @@
+---
+// src/components/DosageCalculator.astro
+// Calculadora interactiva de dosificación personalizada
+// Propósito: Cálculo GEO (Generative Engine Optimization) - datos únicos para AI engines
+
+interface Props {
+  productId?: 'recovery' | 'hydration' | 'immunity';
+}
+
+const { productId = 'recovery' } = Astro.props;
+
+// Mapeo de productos a información de dosificación
+const productInfo = {
+  recovery: {
+    name: 'Pure24 Recovery',
+    formula: 'peso × 0.2g',
+    unit: 'g',
+    maxDose: 30,
+    minWeight: 50,
+    maxWeight: 150,
+  },
+  hydration: {
+    name: 'Pure24 Hydration',
+    formula: '(peso × 0.15) + 5g',
+    unit: 'g',
+    maxDose: 25,
+    minWeight: 50,
+    maxWeight: 150,
+  },
+  immunity: {
+    name: 'Pure24 Immunity',
+    formula: '500mg + (peso × 2mg), máx 2000mg',
+    unit: 'mg',
+    maxDose: 2000,
+    minWeight: 50,
+    maxWeight: 150,
+  },
+};
+
+const info = productInfo[productId];
+---
+
+<section class="dosage-calculator">
+  <div class="calculator-container">
+    <div class="calculator-header">
+      <h3>{info.name} - Calculadora de Dosificación</h3>
+      <p class="formula">Fórmula: {info.formula}</p>
+    </div>
+
+    <form id="dosage-form" class="calculator-form">
+      <div class="form-group">
+        <label for="weight-input">Tu peso corporal (kg)</label>
+        <div class="input-wrapper">
+          <input
+            id="weight-input"
+            type="number"
+            min={info.minWeight}
+            max={info.maxWeight}
+            placeholder="Ej: 70"
+            required
+            aria-label="Ingresa tu peso en kilogramos"
+          />
+          <span class="unit">kg</span>
+        </div>
+        <small class="help-text">Rango válido: {info.minWeight}-{info.maxWeight} kg</small>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">
+        Calcular mi dosis
+      </button>
+    </form>
+
+    <div id="result-container" class="result-container" style="display: none;">
+      <div class="result-card">
+        <h4>Tu dosis recomendada</h4>
+
+        <div class="result-value">
+          <span id="dose-value" class="dose-number">0</span>
+          <span class="dose-unit">{info.unit}</span>
+        </div>
+
+        <div class="result-details">
+          <div class="detail-item">
+            <span class="label">Servings necesarios:</span>
+            <span id="servings-value" class="value">-</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="label">Momento de consumo:</span>
+            <span id="timing-value" class="value">-</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="label">Agua recomendada:</span>
+            <span id="water-value" class="value">-</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="label">Nota importante:</span>
+            <span id="notes-value" class="value">-</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          id="recalculate-btn"
+          class="btn btn-secondary btn-block"
+        >
+          Calcular de nuevo
+        </button>
+      </div>
+
+      <div id="error-message" class="error-message" style="display: none;">
+        <p></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dosage-calculator {
+    width: 100%;
+    margin: var(--spacing-lg) 0;
+  }
+
+  .calculator-container {
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-white) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(26, 188, 156, 0.1);
+  }
+
+  .calculator-header {
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+  }
+
+  .calculator-header h3 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+    font-size: 1.25rem;
+  }
+
+  .formula {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    font-style: italic;
+    margin: 0;
+  }
+
+  .calculator-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .form-group label {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    font-size: 0.95rem;
+  }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-wrapper input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    padding-right: 50px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+    background: var(--color-white);
+  }
+
+  .input-wrapper input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+  }
+
+  .input-wrapper input::placeholder {
+    color: var(--color-text-tertiary);
+  }
+
+  .input-wrapper .unit {
+    position: absolute;
+    right: var(--spacing-md);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-semibold);
+    pointer-events: none;
+  }
+
+  .help-text {
+    color: var(--color-text-tertiary);
+    font-size: 0.8rem;
+    display: block;
+  }
+
+  .result-container {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .result-card {
+    background: var(--color-white);
+    border: 2px solid var(--color-success);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .result-card h4 {
+    color: var(--color-text);
+    margin: 0 0 var(--spacing-md) 0;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .result-value {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: linear-gradient(135deg, var(--color-success) 0%, var(--color-primary) 100%);
+    border-radius: var(--radius-md);
+    color: var(--color-white);
+  }
+
+  .dose-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .dose-unit {
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-semibold);
+    opacity: 0.9;
+  }
+
+  .result-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .detail-item:last-child {
+    border-bottom: none;
+  }
+
+  .detail-item .label {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.9rem;
+  }
+
+  .detail-item .value {
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+    text-align: right;
+    max-width: 60%;
+  }
+
+  .error-message {
+    background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+    border: 1px solid #fcc;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    color: var(--color-error, #d32f2f);
+    font-size: 0.9rem;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .error-message p {
+    margin: 0;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .calculator-container {
+      padding: var(--spacing-md);
+    }
+
+    .dose-number {
+      font-size: 2rem;
+    }
+
+    .detail-item {
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
+
+    .detail-item .value {
+      max-width: 100%;
+      text-align: left;
+    }
+  }
+</style>
+
+<script define:vars={{ productId, info }}>
+  // Importar funciones de cálculo
+  import {
+    calculateRecoveryDose,
+    calculateHydrationDose,
+    calculateImmunityDose,
+    getDosageInfo,
+    validateWeight
+  } from '../lib/calcs';
+
+  const form = document.getElementById('dosage-form');
+  const weightInput = document.getElementById('weight-input');
+  const resultContainer = document.getElementById('result-container');
+  const errorMessage = document.getElementById('error-message');
+  const recalculateBtn = document.getElementById('recalculate-btn');
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      calculateDosage();
+    });
+  }
+
+  if (recalculateBtn) {
+    recalculateBtn.addEventListener('click', () => {
+      form.reset();
+      resultContainer.style.display = 'none';
+      errorMessage.style.display = 'none';
+      weightInput.focus();
+    });
+  }
+
+  function calculateDosage() {
+    const weight = parseFloat(weightInput.value);
+
+    // Validar peso
+    const validation = validateWeight(weight);
+    if (!validation.valid) {
+      showError(validation.message);
+      return;
+    }
+
+    try {
+      const dosageInfo = getDosageInfo(productId, weight);
+
+      // Mostrar resultados
+      document.getElementById('dose-value').textContent =
+        dosageInfo.dose_grams || dosageInfo.dose_mg;
+      document.getElementById('servings-value').textContent =
+        dosageInfo.servings + ' servings';
+      document.getElementById('timing-value').textContent = dosageInfo.timing;
+      document.getElementById('water-value').textContent =
+        dosageInfo.water_ml + ' ml';
+      document.getElementById('notes-value').textContent = dosageInfo.notes;
+
+      resultContainer.style.display = 'block';
+      errorMessage.style.display = 'none';
+
+      // Scroll suave hacia resultados
+      setTimeout(() => {
+        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    } catch (err) {
+      showError(err.message || 'Error calculando dosis');
+    }
+  }
+
+  function showError(message) {
+    errorMessage.querySelector('p').textContent = message;
+    errorMessage.style.display = 'block';
+    resultContainer.style.display = 'none';
+  }
+</script>

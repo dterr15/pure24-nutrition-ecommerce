@@ -1,0 +1,217 @@
+{
+  "version": "1.0.0",
+  "project": "Pure24 Nutrition",
+  "lastUpdated": "2026-03-08",
+  "description": "Design Token System - Fuente única de verdad visual",
+
+  "colors": {
+    "primary": {
+      "base": "#1ABC9C",
+      "dark": "#16A085",
+      "light": "#48C9B0",
+      "lighter": "#D4F1F4",
+      "description": "Verde teal vibrante - Botones, CTAs, acentos principales"
+    },
+    "secondary": {
+      "base": "#1A2B4A",
+      "light": "#2C3E50",
+      "lighter": "#34495E",
+      "description": "Azul marino oscuro - Headers, footers, backgrounds oscuros"
+    },
+    "neutral": {
+      "dark": "#333333",
+      "mid": "#888888",
+      "light": "#F5F5F5",
+      "lighter": "#FAFAFA",
+      "white": "#FFFFFF",
+      "description": "Escala neutral para textos y fondos"
+    },
+    "semantic": {
+      "success": "#27AE60",
+      "warning": "#F39C12",
+      "error": "#E74C3C",
+      "info": "#3498DB",
+      "description": "Colores semánticos para estados"
+    },
+    "surfaces": {
+      "card": "#FFFFFF",
+      "cardHover": "#F9F9F9",
+      "background": "#FAFAFA",
+      "backgroundAlt": "#F5F5F5",
+      "description": "Fondos de componentes y secciones"
+    }
+  },
+
+  "typography": {
+    "fontFamilies": {
+      "display": {
+        "name": "Playfair Display",
+        "source": "Google Fonts",
+        "weights": ["400", "600", "700"],
+        "usage": "H1, H2, headings principales",
+        "fallback": "Georgia, serif"
+      },
+      "body": {
+        "name": "Inter",
+        "source": "Google Fonts",
+        "weights": ["400", "500", "600", "700"],
+        "usage": "Párrafos, UI text, labels",
+        "fallback": "system-ui, -apple-system, sans-serif"
+      },
+      "mono": {
+        "name": "Courier New",
+        "source": "System",
+        "weights": ["400"],
+        "usage": "Código, datos técnicos",
+        "fallback": "monospace"
+      }
+    },
+    "sizes": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.5rem",
+      "2xl": "1.875rem",
+      "3xl": "2.25rem",
+      "4xl": "3rem",
+      "5xl": "3.75rem",
+      "description": "Escala tipográfica basada en rem (16px base)"
+    },
+    "lineHeights": {
+      "tight": "1.2",
+      "normal": "1.5",
+      "relaxed": "1.75",
+      "loose": "2"
+    },
+    "letterSpacing": {
+      "tight": "-0.02em",
+      "normal": "0em",
+      "wide": "0.02em"
+    }
+  },
+
+  "spacing": {
+    "description": "Base: 4px - Todos los espaciados son múltiplos de 4",
+    "xs": "0.25rem",
+    "sm": "0.5rem",
+    "md": "1rem",
+    "lg": "1.5rem",
+    "xl": "2rem",
+    "2xl": "2.5rem",
+    "3xl": "3rem",
+    "4xl": "4rem",
+    "5xl": "6rem",
+    "6xl": "8rem",
+    "sectionPaddingDesktop": "5rem",
+    "sectionPaddingMobile": "3rem",
+    "containerMaxWidth": "1200px",
+    "containerPadding": "1.5rem"
+  },
+
+  "borderRadius": {
+    "none": "0",
+    "sm": "0.25rem",
+    "md": "0.5rem",
+    "lg": "1rem",
+    "xl": "1.5rem",
+    "full": "9999px",
+    "description": "Radios para inputs, buttons, cards"
+  },
+
+  "shadows": {
+    "none": "none",
+    "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+    "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+    "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+    "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+    "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+    "inner": "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)"
+  },
+
+  "breakpoints": {
+    "mobile": "0px",
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px",
+    "2xl": "1536px"
+  },
+
+  "components": {
+    "button": {
+      "primary": {
+        "backgroundColor": "#1ABC9C",
+        "color": "#FFFFFF",
+        "padding": "0.875rem 2rem",
+        "borderRadius": "9999px",
+        "fontSize": "1rem",
+        "fontWeight": "600",
+        "transition": "all 200ms ease-out",
+        "hover": {
+          "backgroundColor": "#16A085",
+          "transform": "translateY(-2px)",
+          "boxShadow": "0 10px 15px -3px rgba(26, 188, 156, 0.3)"
+        },
+        "focus": {
+          "outline": "2px solid #1ABC9C",
+          "outlineOffset": "2px"
+        }
+      },
+      "secondary": {
+        "backgroundColor": "#FFFFFF",
+        "color": "#1ABC9C",
+        "border": "2px solid #1ABC9C",
+        "padding": "0.875rem 2rem",
+        "borderRadius": "9999px",
+        "fontSize": "1rem",
+        "fontWeight": "600",
+        "transition": "all 200ms ease-out",
+        "hover": {
+          "backgroundColor": "#D4F1F4",
+          "borderColor": "#16A085"
+        }
+      }
+    },
+    "badge": {
+      "backgroundColor": "#D4F1F4",
+      "color": "#16A085",
+      "padding": "0.25rem 0.75rem",
+      "borderRadius": "0.25rem",
+      "fontSize": "0.75rem",
+      "fontWeight": "600",
+      "textTransform": "uppercase",
+      "letterSpacing": "0.05em"
+    },
+    "card": {
+      "backgroundColor": "#FFFFFF",
+      "borderRadius": "0.5rem",
+      "padding": "2rem",
+      "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+      "transition": "all 200ms ease-out",
+      "hover": {
+        "boxShadow": "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+        "transform": "translateY(-4px)"
+      }
+    }
+  },
+
+  "motionDefaults": {
+    "transitionDuration": "200ms",
+    "transitionTiming": "ease-out",
+    "scrollAnimationTrigger": "IntersectionObserver",
+    "staggerDelay": "80ms",
+    "enterAnimation": {
+      "type": "fade-up",
+      "duration": "600ms",
+      "delay": "0ms"
+    }
+  },
+
+  "accessibility": {
+    "minContrastRatio": "4.5:1",
+    "focusOutlineWidth": "2px",
+    "focusOutlineColor": "#1ABC9C",
+    "minTouchTarget": "44px"
+  }
+}

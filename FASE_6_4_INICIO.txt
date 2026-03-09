@@ -1,0 +1,201 @@
+================================================================================
+                   FASE 6.4: DEPLOY AUTOMÁTICO
+                     KNOWLEDGE PACK - COMPLETADO
+================================================================================
+
+FECHA:        9 de Marzo de 2026
+STATUS:       ✅ COMPLETADO (7 DOCUMENTOS + 4 SCRIPTS)
+TIEMPO EXEC:  27 MINUTOS (10 pasos)
+
+================================================================================
+                           ARCHIVOS CREADOS
+================================================================================
+
+📚 DOCUMENTACIÓN (6 ARCHIVOS)
+────────────────────────────────────────────────────────────────────────────
+
+1. KNOWLEDGE_PACK_FASE_6.md ⭐ EMPEZAR AQUÍ
+   └─ Overview completo del package
+   └─ Contiene: descripción, flujos, timeline, guía de uso (3 opciones)
+   └─ Tiempo lectura: 5 minutos
+
+2. FASE_6_4_CHECKLIST_PASO_A_PASO.md ⭐ GUÍA PRINCIPAL
+   └─ 10 pasos ejecutables paso a paso
+   └─ Contiene: validaciones, comandos, troubleshooting
+   └─ Tiempo ejecución: 27 minutos
+   └─ ESTO ES LO QUE USARÁS MIENTRAS TRABAJAS
+
+3. FASE_6_4_N8N_GUIDE.md
+   └─ Guía específica para n8n (VPS)
+   └─ Contiene: acceso, workflow, debugging, errores comunes
+   └─ Usar cuando: PASO 5-6 o si hay problemas con n8n
+
+4. FASE_6_4_REFERENCE.md
+   └─ Referencia rápida - comandos copy-paste
+   └─ Contiene: comandos, arquitectura, troubleshooting indexado
+   └─ Usar cuando: Necesites un comando rápido o debuggear
+
+5. FASE_6_4_VALIDATION.md
+   └─ Checklist de validación completo (GATE 6)
+   └─ Contiene: pre-checks, execution checks, validación final
+   └─ Usar cuando: DESPUÉS de completar PASOS 1-10
+
+6. KNOWLEDGE_PACK_MANIFEST.md (ACTUALIZADO)
+   └─ Índice de TODOS los archivos del proyecto
+   └─ Agrupa FASE 2 + FASE 6.4
+   └─ Para referencia y verificación de integridad
+
+💻 CÓDIGO & SCRIPTS (4 ARCHIVOS)
+────────────────────────────────────────────────────────────────────────────
+
+1. FASE_6_4_N8N_WORKFLOW.json
+   └─ Workflow n8n listo para importar
+   └─ Contiene: 5 nodos preconfigurados, conexiones
+   └─ Uso: n8n UI → Import from file → seleccionar este archivo
+
+2. scripts/create-deploy-events-table.sql
+   └─ Script SQL para crear tabla de auditoría
+   └─ Contiene: CREATE TABLE, índices, comentarios
+   └─ Uso: Ejecutar en PostgreSQL (PASO 2)
+
+3. scripts/fase-6-4-setup.sh
+   └─ Script bash para automatizar PASOS 1-4 (OPCIONAL)
+   └─ Contiene: Validación Deploy Hook, crear tabla, .env, n8n check
+   └─ Uso: ./scripts/fase-6-4-setup.sh
+
+4. scripts/fase-6-4-test.sh
+   └─ Script bash para automatizar PASOS 7-10 (OPCIONAL)
+   └─ Contiene: Orden test, webhook, validaciones
+   └─ Uso: ./scripts/fase-6-4-test.sh
+
+================================================================================
+                        3 OPCIONES DE USO
+================================================================================
+
+OPCIÓN A: PASO A PASO (Recomendado para aprender) ⭐
+───────────────────────────────────────────────────
+Tiempo total: 30-40 minutos (lectura + ejecución)
+
+1. Lee:     KNOWLEDGE_PACK_FASE_6.md (5 min)
+2. Abre:    FASE_6_4_CHECKLIST_PASO_A_PASO.md
+3. Ejecuta: PASOS 1-10 en orden (25 min)
+4. Valida:  FASE_6_4_VALIDATION.md (10 min)
+
+Ventaja: Aprendes qué hace cada paso
+
+
+OPCIÓN B: AUTOMATIZADO (Rápido) ⚡
+─────────────────────────────────
+Tiempo total: 15-20 minutos
+
+1. Lee:      KNOWLEDGE_PACK_FASE_6.md (5 min)
+2. Ejecuta:  ./scripts/fase-6-4-setup.sh (3 min) → PASOS 1-4
+3. Manual:   PASOS 5-6 en n8n UI (5 min)
+4. Ejecuta:  ./scripts/fase-6-4-test.sh (5 min) → PASOS 7-10
+5. Valida:   FASE_6_4_VALIDATION.md (2 min)
+
+Ventaja: Mucho más rápido, scripts hacen el trabajo pesado
+
+
+OPCIÓN C: SI YA SABES QUÉ HACER 🚀
+──────────────────────────────────
+Tiempo total: 10-15 minutos
+
+1. Consulta: FASE_6_4_REFERENCE.md (comandos rápidos)
+2. Ejecuta:  Pasos manualmente
+3. Usa:      FASE_6_4_N8N_WORKFLOW.json (import en n8n)
+4. Valida:   FASE_6_4_VALIDATION.md (final checks)
+
+Ventaja: Máxima velocidad para expertos
+
+================================================================================
+                        FLUJO COMPLETO (2 MINUTOS)
+================================================================================
+
+Compra realizada (Webhook IPN)
+        ↓ T+5s
+    Stock reducido en Directus (FASE 6.1) ✅
+        ↓ T+10s
+    n8n webhook disparado
+        ↓ T+15s
+    Deploy Hook a Cloudflare
+        ↓ T+20s-120s
+    Cloudflare rebuild
+        ↓ T+2min
+    ✅ SITIO ACTUALIZADO Y ACTIVE
+
+================================================================================
+                        ARQUITECTURA TÉCNICA
+================================================================================
+
+Stock Change Event (Directus)
+        ↓
+        └─→ n8n Workflow (5 nodos)
+                ├─ 1. Webhook Trigger (recibe event)
+                ├─ 2. Fetch Stock (valida datos)
+                ├─ 3. Trigger Deploy Hook (POST a Cloudflare)
+                ├─ 4. Verify Deploy (confirma que inició)
+                └─ 5. Log Deploy Event (auditoría en Directus)
+        ↓
+    Cloudflare Pages Deploy Hook
+        ├─ Inicia rebuild automático
+        ├─ ~1-2 minutos de rebuild
+        └─ Sitio online con datos nuevos ✅
+        ↓
+    deploy_events table
+        └─ Auditoría de todos los deploys
+
+================================================================================
+                        VALIDACIONES INCLUIDAS
+================================================================================
+
+PRE-EXECUTION:
+  ✓ Deploy Hook URL válida
+  ✓ PostgreSQL accesible
+  ✓ Directus API funcionando
+  ✓ n8n accesible
+
+PASOS 1-10:
+  ✓ Validación en cada PASO
+  ✓ Comandos verificables
+  ✓ Troubleshooting inline
+
+POST-EXECUTION (GATE 6):
+  ✓ Stock sync working (FASE 6.1)
+  ✓ GA4 analytics (FASE 6.2)
+  ✓ Deploy automático (FASE 6.4)
+  ✓ Sitio actualizado < 5 min
+
+================================================================================
+                        COMIENZA AHORA 🚀
+================================================================================
+
+Paso 1: Abre este archivo: KNOWLEDGE_PACK_FASE_6.md
+
+Paso 2: Selecciona tu opción (A, B o C)
+
+Paso 3: Si elegiste A o B, abre: FASE_6_4_CHECKLIST_PASO_A_PASO.md
+
+Paso 4: Sigue cada PASO en orden
+
+Paso 5: Avisame cuando termines cada PASO para validar
+
+Paso 6: Al final, ejecuta: FASE_6_4_VALIDATION.md para GATE 6
+
+================================================================================
+
+ARCHIVOS IMPORTANTES:
+  - KNOWLEDGE_PACK_FASE_6.md      (overview + guía)
+  - FASE_6_4_CHECKLIST_*.md       (10 pasos)
+  - FASE_6_4_N8N_GUIDE.md         (dudas con n8n)
+  - FASE_6_4_REFERENCE.md         (comandos rápidos)
+  - FASE_6_4_VALIDATION.md        (validación final)
+
+STATUS: ✅ TODO LISTO PARA EJECUTAR
+
+Tiempo total: 27-40 minutos
+Opción recomendada: A (paso a paso, aprende más)
+
+¿Listo? 🚀 Abre KNOWLEDGE_PACK_FASE_6.md
+
+================================================================================

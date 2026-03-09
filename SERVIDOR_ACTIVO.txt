@@ -1,0 +1,161 @@
+═══════════════════════════════════════════════════════════════════════════════
+                     🌐 SERVIDOR LOCAL ACTIVO
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ URL: http://localhost:3000
+
+🎨 LO QUE VES EN EL NAVEGADOR:
+─────────────────────────────────────────────────────────────────────────────
+
+[HEADER]
+┌──────────────────────────────────────────────────────────────────────────┐
+│ Logo: Pure 24 Nutrition                  [Inicio] [Productos] [Acceder]  │
+└──────────────────────────────────────────────────────────────────────────┘
+
+[HERO SECTION]
+┌──────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│           PLACEHOLDER: Headline principal                               │
+│           PLACEHOLDER: Subheadline                                      │
+│                                                                          │
+│                    [PLACEHOLDER: Texto CTA]                             │
+│                                                                          │
+│                      [Imagen placeholder]                               │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+
+[VALUE PROPOSITION - 3 Cards]
+┌─────────────┬──────────────┬──────────────────┐
+│ Icon + T 1  │ Icon + T 2   │ Icon + T 3       │
+│ Descripción │ Descripción  │ Descripción      │
+└─────────────┴──────────────┴──────────────────┘
+
+[FOUNDATION - 3 Pilares]
+┌─────────────┬──────────────┬──────────────────┐
+│ Pilar 1     │ Pilar 2      │ Pilar 3          │
+│ Descripción │ Descripción  │ Descripción      │
+└─────────────┴──────────────┴──────────────────┘
+
+[CTA SECUNDARIA]
+    PLACEHOLDER: Headline secundario
+    PLACEHOLDER: Descripción persuasiva
+              [CTA BUTTON]
+
+[SOCIAL PROOF - 3 Métricas]
+    Métrica 1: Valor  │  Métrica 2: Valor  │  Métrica 3: Valor
+
+[FAQ - 3 Preguntas]
+  ▼ PLACEHOLDER: Pregunta 1
+  ▼ PLACEHOLDER: Pregunta 2
+  ▼ PLACEHOLDER: Pregunta 3
+  (Click para expandir respuestas)
+
+[FOOTER]
+Productos  │  Empresa  │  Legal
+Pure 24 Nutrition • Punta Arenas • © 2025
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📊 VERIFICACIÓN TÉCNICA:
+─────────────────────────────────────────────────────────────────────────────
+
+Abre DevTools (F12):
+  ✅ Console → Debe estar limpia (sin errores)
+  ✅ Network → 
+      • index.html: ~4.5 KB
+      • CSS: ~20 KB
+      • JS: ~5 KB
+      Total sin imágenes: < 30 KB
+  ✅ Elements → HTML semántico correcto
+      • <header>, <nav>, <main>, <section>, <footer>
+      • ARIA labels presentes
+      • Alt text en imágenes (placeholder)
+  ✅ Mobile (F12 → Toggle Device) → Responsive
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📝 PLACEHOLDERS A REEMPLAZAR:
+─────────────────────────────────────────────────────────────────────────────
+
+1. HERO SECTION (6 items)
+2. VALUE PROPOSITION (4 items)
+3. FOUNDATION (5 items)
+4. CTA SECTION (3 items)
+5. SOCIAL PROOF (6 items)
+6. FAQ (6 items)
+7. META TAGS (4 items)
+8. FOOTER NAP (3 items)
+
+Total: 37 PLACEHOLDERS
+
+Ubicación: src/pages/index.astro
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🖼️ IMÁGENES A PREPARAR:
+─────────────────────────────────────────────────────────────────────────────
+
+public/images/
+├── hero-image.jpg (original)
+├── hero-image-400.webp   (400px wide)
+├── hero-image-800.webp   (800px wide)
+├── hero-image-1200.webp  (1200px wide)
+└── hero-image-1600.webp  (1600px wide)
+
+public/icons/
+├── icon-1.svg (48x48)
+├── icon-2.svg
+└── icon-3.svg
+
+OPCIONES:
+  A. squoosh.app (online, recomendado)
+  B. ImageMagick (terminal)
+  C. Photoshop / GIMP (desktop)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ QUÉ ESTÁ COMPLETO:
+─────────────────────────────────────────────────────────────────────────────
+
+✓ Estructura HTML semántica
+✓ Design Tokens (colores, tipografía, espaciado)
+✓ Responsive design (6 breakpoints)
+✓ Meta tags SEO
+✓ Schema.org markup (Organization, LocalBusiness, FAQPage)
+✓ Accesibilidad WCAG 2.1 AA
+✓ Performance optimizado (lazy loading, preload)
+✓ Animaciones CSS
+✓ Navegación smooth scroll
+✓ FAQ expandible
+✓ Footer completo
+
+═══════════════════════════════════════════════════════════════════════════════
+
+⏳ PENDIENTES DEL USUARIO:
+─────────────────────────────────────────────────────────────────────────────
+
+[ ] Preparar imágenes en 4 tamaños WebP
+[ ] Reemplazar 37 PLACEHOLDERS en index.astro
+[ ] Agregar SVG icons (3)
+[ ] npm run build
+[ ] npm run preview (validar visual)
+[ ] Deploy a Cloudflare Pages
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🚀 PRÓXIMO PASO:
+─────────────────────────────────────────────────────────────────────────────
+
+FASE 2 — MESSAGE LAB
+
+Después de desplegar este sitio, crearemos el copy exacto usando:
+  • AIDA Framework (Atención, Interés, Deseo, Acción)
+  • PAS Framework (Problema, Agitación, Solución)
+  • StoryBrand Framework (narrativa del cliente)
+
+Objetivos:
+  • Copy que convierte
+  • CTAs optimizados
+  • Cada palabra deliberada
+
+═══════════════════════════════════════════════════════════════════════════════

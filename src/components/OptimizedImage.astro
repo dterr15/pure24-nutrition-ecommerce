@@ -1,0 +1,114 @@
+---
+// src/components/OptimizedImage.astro
+// Componente que maneja lazy loading, WebP, srcset automático
+// Previene layout shift con aspect ratio CSS
+
+export interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  priority?: boolean;
+  sizes?: string;
+  class?: string;
+  decoding?: 'sync' | 'async';
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  priority = false,
+  sizes = '100vw',
+  class: className = '',
+  decoding = 'async',
+} = Astro.props;
+
+// Generar URLs optimizadas
+const baseFileName = src.replace(/\.\w+$/, '');
+const webpSrc = `${baseFileName}.webp`;
+const jpgSrc = src;
+
+// Generar srcset para 4 breakpoints
+const webpSrcSet = [
+  `${baseFileName}-400.webp 400w`,
+  `${baseFileName}-800.webp 800w`,
+  `${baseFileName}-1200.webp 1200w`,
+  `${baseFileName}-1600.webp 1600w`,
+].join(', ');
+
+const jpgSrcSet = [
+  `${baseFileName}-400.jpg 400w`,
+  `${baseFileName}-800.jpg 800w`,
+  `${baseFileName}-1200.jpg 1200w`,
+  `${baseFileName}-1600.jpg 1600w`,
+].join(', ');
+
+// Calcular aspect ratio para prevenir layout shift (CLS)
+const aspectRatio = ((width / height) * 100).toFixed(4);
+
+// Determinar fetchPriority según prioridad
+const fetchPriority = priority ? 'high' : 'auto';
+const loading = priority ? 'eager' : 'lazy';
+const decodingValue = priority ? 'sync' : decoding;
+---
+
+<style define:vars={{ aspectRatio }}>
+  picture {
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+
+  img {
+    aspect-ratio: var(--aspectRatio);
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    animation: fadeIn 300ms ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0.8;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  img[data-state="error"] {
+    background-color: #f5f5f5;
+  }
+</style>
+
+<picture>
+  <source
+    srcSet={webpSrcSet}
+    type="image/webp"
+    sizes={sizes}
+  />
+  <source
+    srcSet={jpgSrcSet}
+    type="image/jpeg"
+    sizes={sizes}
+  />
+  <img
+    src={jpgSrc}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding={decodingValue}
+    fetchPriority={fetchPriority}
+    class={className}
+  />
+</picture>
+
+<script>
+  if (!document.querySelectorAll('picture').length) {
+    console.warn('Picture element not supported');
+  }
+</script>

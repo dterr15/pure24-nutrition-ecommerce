@@ -1,0 +1,173 @@
+{
+  "name": "Stock Change → Deploy Cloudflare Pages",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stock-change",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=http://localhost:8055/api/items/products?filter[sku][_eq]={{$json.sku}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.DIRECTUS_API_KEY}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-stock",
+      "name": "Fetch Stock Actual",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        450,
+        300
+      ],
+      "credentials": {},
+      "connections": {
+        "Webhook Trigger": [
+          [
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.CF_DEPLOY_HOOK_URL}}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": []
+        },
+        "options": {}
+      },
+      "id": "trigger-deploy-hook",
+      "name": "Trigger Deploy Hook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        650,
+        300
+      ],
+      "credentials": {},
+      "connections": {
+        "Fetch Stock Actual": [
+          [
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  status_code: 200,\n  deploy_started: true,\n  triggered_at: new Date().toISOString(),\n  webhook_triggered: true\n};"
+      },
+      "id": "verify-deploy",
+      "name": "Verify Deploy Started",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        850,
+        300
+      ],
+      "connections": {
+        "Trigger Deploy Hook": [
+          [
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://localhost:8055/api/items/deploy_events",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.DIRECTUS_API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "event_type",
+              "value": "stock_change_deploy"
+            },
+            {
+              "name": "stock_sku",
+              "value": "={{$json.sku}}"
+            },
+            {
+              "name": "deploy_started",
+              "value": "=true"
+            },
+            {
+              "name": "provider",
+              "value": "cloudflare"
+            },
+            {
+              "name": "status_code",
+              "value": "=200"
+            },
+            {
+              "name": "triggered_at",
+              "value": "={{$json.triggered_at}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "log-deploy-event",
+      "name": "Log Deploy Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1050,
+        300
+      ],
+      "credentials": {},
+      "connections": {
+        "Verify Deploy Started": [
+          [
+            0
+          ]
+        ]
+      }
+    }
+  ],
+  "connections": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "triggerNodes": [
+    "webhook-trigger"
+  ]
+}

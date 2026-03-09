@@ -1,0 +1,127 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database with pgvector support
+  postgres:
+    image: pgvector/pgvector:0.5.1-pg15
+    container_name: pure24_postgres
+    environment:
+      POSTGRES_USER: directus
+      POSTGRES_PASSWORD: directus_secure_password_123
+      POSTGRES_DB: directus
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U directus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pure24-network
+    labels:
+      app: "pure24-nutrition"
+      service: "database"
+      environment: "development"
+    restart: unless-stopped
+
+  # Directus Headless CMS
+  directus:
+    image: directus/directus:latest
+    container_name: pure24_directus
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Database Connection
+      DB_CLIENT: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: directus
+      DB_USER: directus
+      DB_PASSWORD: directus_secure_password_123
+
+      # Core Configuration
+      KEY: 3f4d7e9b8c2a1f5e6d7a8b9c0d1e2f3a
+      SECRET: 7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d
+
+      # Admin Credentials
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+
+      # Public URL
+      PUBLIC_URL: http://localhost:8055
+
+      # CORS Configuration
+      API_CORS_ENABLED: "true"
+      API_CORS_ORIGIN: "*"
+
+      # File Storage
+      STORAGE_LOCATIONS: local
+      STORAGE_LOCAL_DRIVER: local
+      STORAGE_LOCAL_ROOT: /directus/uploads
+
+      # Authentication
+      AUTH_LOGIN_ATTEMPTS: 5
+      AUTH_LOGIN_ATTEMPTS_WINDOW: 15m
+
+      # Redis Cache (NEW)
+      CACHE_ENABLED: "true"
+      CACHE_STORE: redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+    ports:
+      - "8055:8055"
+    volumes:
+      - directus_uploads:/directus/uploads
+      - directus_extensions:/directus/extensions
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8055/server/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pure24-network
+    labels:
+      app: "pure24-nutrition"
+      service: "cms"
+      environment: "development"
+    restart: unless-stopped
+
+  # Redis Cache Layer (NEW)
+  redis:
+    image: redis:7-alpine
+    container_name: pure24_redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pure24-network
+    labels:
+      app: "pure24-nutrition"
+      service: "cache"
+      environment: "development"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  directus_uploads:
+    driver: local
+  directus_extensions:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  pure24-network:
+    driver: bridge

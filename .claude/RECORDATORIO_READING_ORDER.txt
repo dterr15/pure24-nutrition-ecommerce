@@ -1,0 +1,43 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    ⚠️  RECORDATORIO IMPORTANTE
+═══════════════════════════════════════════════════════════════════════════════
+
+DOCUMENTO: SPEC_READING_ORDER.md creado en sesión 8 de Marzo 2026
+
+⏰ CUÁNDO USAR:
+   Cuando el Knowledge Pack esté 100% COMPLETADO (todas FASES 1-4 terminadas)
+   y quieras pasar contexto completo a Claude Opus para FASE 3 (Backend)
+
+📋 QUÉ HACER:
+   1. Verifica que tengas todos estos documentos:
+      - FASE 1: Project Manifest, Domain Model, Content Architecture
+      - FASE 2: JSON Contract, Design Tokens, API Contracts, CMS Schema, Golden Rules
+      - FASE 3: UI Specification, Prompt Engineering
+      - FASE 4: Acceptance Tests, SEO/GEO Blueprint, Architecture Decisions, Deployment
+
+   2. Abre el archivo: SPEC_READING_ORDER.md
+
+   3. Copia el PROMPT PARA CLAUDE CODE al inicio de ese archivo
+
+   4. En el siguiente chat, pega:
+      "Necesito que generes un spec técnico para un archivo 00_READING_ORDER.md
+       que mapee completamente nuestro Knowledge Pack de Pure24 Nutrition..."
+       (ver SPEC_READING_ORDER.md para prompt completo)
+
+   5. Claude Code generará automáticamente:
+      docs/00_READING_ORDER.md
+
+   6. Ese archivo será tu mapa para pasar TODO el contexto a Opus
+
+📁 ARCHIVOS RELACIONADOS:
+   - SPEC_READING_ORDER.md ← Guía para generar Reading Order
+   - KNOWLEDGE_PACK_MANIFEST.md ← Validación de archivos actuales
+   - FASE_2_COMPLETADA.md ← Estado actual del proyecto
+
+⚠️  NO OLVIDAR:
+   Este documento (RECORDATORIO_READING_ORDER.txt) está en .claude/
+   para que lo veas en el siguiente chat.
+
+═══════════════════════════════════════════════════════════════════════════════
+                    STATUS: SPEC CREADO Y LISTO ✅
+═══════════════════════════════════════════════════════════════════════════════

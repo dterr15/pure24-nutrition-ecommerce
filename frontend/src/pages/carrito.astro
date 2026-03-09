@@ -1,0 +1,68 @@
+---
+/**
+ * /carrito - Página del Carrito
+ * Renderiza el componente ShoppingCart con client:only
+ * El carrito se carga automáticamente del localStorage
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import ShoppingCart from '@/components/ShoppingCart';
+---
+
+<Layout
+  title="Mi carrito - Pure24 Nutrition"
+  description="Revisa y edita los productos en tu carrito de compras"
+>
+  <main class="carrito-page">
+    {/* Contenedor del carrito (mobile-first) */}
+    <div class="carrito-container">
+      <ShoppingCart client:only="react" />
+    </div>
+
+    {/* Fallback para usuarios sin JavaScript */}
+    <noscript>
+      <div class="no-js-message">
+        <p>Este sitio requiere JavaScript para mostrar el carrito de compras.</p>
+        <p>Por favor, habilita JavaScript en tu navegador.</p>
+      </div>
+    </noscript>
+  </main>
+</Layout>
+
+<style>
+  .carrito-page {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #ffffff 0%, #f9fafb 100%);
+    padding: 40px 20px;
+  }
+
+  .carrito-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .no-js-message {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    color: #991b1b;
+  }
+
+  .no-js-message p {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .no-js-message p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 640px) {
+    .carrito-page {
+      padding: 0;
+    }
+  }
+</style>

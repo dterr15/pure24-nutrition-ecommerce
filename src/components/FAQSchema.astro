@@ -1,0 +1,143 @@
+---
+// src/components/FAQSchema.astro
+// Componente que genera FAQ Schema dinámico con JSON-LD
+// Pure 24 Nutrition - FASE 2: GEO & AI OPTIMIZATION
+
+export interface FAQItem {
+  question: string;
+  answer: string;
+  keywords?: string[]; // Palabras a destacar con <strong>
+}
+
+interface Props {
+  faqs: FAQItem[];
+  title?: string;
+}
+
+const {
+  faqs,
+  title = "Preguntas Frecuentes"
+} = Astro.props;
+
+// Validar mínimo de FAQs
+if (!faqs || faqs.length < 3) {
+  console.warn('FAQSchema: Recomendado mínimo 3 preguntas para GEO efectivo');
+}
+
+// Validar respuestas (máx 40 palabras)
+faqs.forEach((faq, index) => {
+  const wordCount = faq.answer.split(/\s+/).length;
+  if (wordCount > 40) {
+    console.warn(`FAQSchema: FAQ #${index + 1} tiene ${wordCount} palabras (máx 40 recomendado)`);
+  }
+});
+
+// Construir JSON-LD FAQPage
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+};
+
+const schemaJson = JSON.stringify(faqSchema);
+
+// Función para destacar palabras clave con <strong>
+function highlightKeywords(text: string, keywords?: string[]): string {
+  if (!keywords || keywords.length === 0) return text;
+
+  let highlighted = text;
+  keywords.forEach(keyword => {
+    const regex = new RegExp(`\\b(${keyword})\\b`, 'gi');
+    highlighted = highlighted.replace(regex, '<strong>$1</strong>');
+  });
+
+  return highlighted;
+}
+---
+
+<section id="faq" class="faq-section">
+  <div class="container">
+    <h2>{title}</h2>
+
+    <div class="faq-list">
+      {faqs.map((faq) => (
+        <div class="faq-item">
+          <details class="faq-details">
+            <summary class="faq-question">{faq.question}</summary>
+            <div class="faq-answer">
+              <p set:html={highlightKeywords(faq.answer, faq.keywords)} />
+            </div>
+          </details>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- JSON-LD Schema para SEO/GEO -->
+<script type="application/ld+json" set:html={schemaJson} />
+
+<style>
+  .faq-section {
+    padding: var(--section-padding-desktop);
+    background-color: var(--color-background);
+  }
+
+  .faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    margin-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-neutral-light);
+  }
+
+  .faq-details {
+    padding: var(--space-lg) 0;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-neutral-dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    list-style: none;
+    transition: color var(--transition-normal);
+  }
+
+  .faq-question:hover {
+    color: var(--color-primary);
+  }
+
+  .faq-details[open] .faq-question {
+    color: var(--color-primary);
+  }
+
+  .faq-answer {
+    padding: var(--space-lg) 0;
+    color: var(--color-neutral-mid);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .faq-answer strong {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .faq-section {
+      padding: var(--section-padding-mobile);
+    }
+  }
+</style>

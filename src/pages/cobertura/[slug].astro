@@ -1,0 +1,404 @@
+---
+// src/pages/cobertura/[slug].astro
+// FASE 3: LOCAL SEO - Landmark Coverage Pages (Dynamic Routes)
+
+import { getLandmarkBySlug, getAllLandmarks, getRelatedLandmarks } from '../../data/landmarks';
+import type { Landmark } from '../../data/landmarks';
+
+export function getStaticPaths() {
+  const landmarks = getAllLandmarks();
+  return landmarks.map(landmark => ({
+    params: { slug: landmark.slug },
+    props: { landmark }
+  }));
+}
+
+interface Props {
+  landmark: Landmark;
+}
+
+const { landmark } = Astro.props;
+const siteUrl = 'https://pure24nutrition.cl';
+const relatedLandmarks = getRelatedLandmarks(landmark.slug);
+
+// NAP exactos desde Google Business Profile (para validación)
+const nap = {
+  name: 'Pure24 Nutrition',
+  streetAddress: 'Jorge Montt 934',
+  postalCode: '6200000',
+  telephone: '+56 9 7134 5988',
+  latitude: '-53.163700',
+  longitude: '-70.908100'
+};
+
+// LocalBusiness Schema por landmark
+const landmarkSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${siteUrl}/cobertura/${landmark.slug}`,
+  "name": `Pure24 Nutrition - Cobertura ${landmark.name}`,
+  "image": `${siteUrl}/logo.svg`,
+  "description": `Suplementación farmacéutica con entrega garantizada en ${landmark.name}, Punta Arenas. ${landmark.fullDescription}`,
+  "url": `${siteUrl}/cobertura/${landmark.slug}`,
+  "telephone": "+56 9 7134 5988",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Punta Arenas",
+    "addressRegion": "Región de Magallanes",
+    "addressCountry": "CL"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": landmark.latitude,
+    "longitude": landmark.longitude
+  },
+  "serviceArea": {
+    "@type": "GeoCircle",
+    "geoMidpoint": {
+      "@type": "GeoCoordinates",
+      "latitude": landmark.latitude,
+      "longitude": landmark.longitude
+    },
+    "geoRadius": `${landmark.coverage * 1000}`
+  },
+  "areaServed": {
+    "@type": "Place",
+    "name": landmark.name
+  }
+};
+
+const pageTitle = `Pure24 Nutrition | Entrega Garantizada en ${landmark.name}`;
+const pageDescription = `${landmark.description}. Cobertura de entrega en ${landmark.deliveryTime}. Suplementación de grado farmacéutico en ${landmark.name}, Punta Arenas.`;
+const ogImage = `${siteUrl}/og-image.jpg`;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- SEO Meta Tags -->
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDescription}>
+  <link rel="canonical" href={`${siteUrl}/cobertura/${landmark.slug}`}>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={`${siteUrl}/cobertura/${landmark.slug}`}>
+  <meta property="og:title" content={pageTitle}>
+  <meta property="og:description" content={pageDescription}>
+  <meta property="og:image" content={ogImage}>
+
+  <!-- Schema.org -->
+  <script type="application/ld+json" set:html={JSON.stringify(landmarkSchema)} />
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": siteUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Cobertura",
+        "item": `${siteUrl}/cobertura`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": landmark.name,
+        "item": `${siteUrl}/cobertura/${landmark.slug}`
+      }
+    ]
+  })} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Business NAP Meta Tags (Validation) -->
+  <meta name="business:name" content={nap.name}>
+  <meta name="business:phone" content={nap.telephone}>
+  <meta name="business:address" content={`${nap.streetAddress}, Punta Arenas, ${nap.postalCode}`}>
+  <meta name="business:coordinates" content={`${nap.latitude},${nap.longitude}`}>
+
+  <script define:vars={{ nap }}>
+    window.BUSINESS_NAP = nap;
+  </script>
+</head>
+
+<body>
+  <!-- Header -->
+  <header role="banner" class="header">
+    <nav role="navigation" aria-label="Navegación principal" class="navbar">
+      <div class="navbar-container">
+        <a href="/" class="navbar-logo" aria-label="Pure 24 Nutrition - Inicio">
+          <img src="/logo.svg" alt="Pure 24 Nutrition Logo" width="120" height="40" loading="eager">
+        </a>
+
+        <ul class="navbar-menu" role="menubar">
+          <li role="none"><a href="/" role="menuitem">Inicio</a></li>
+          <li role="none"><a href="/productos" role="menuitem">Productos</a></li>
+          <li role="none"><a href="/sobre-nosotros" role="menuitem">Sobre Nosotros</a></li>
+          <li role="none"><a href="/contacto" role="menuitem">Contacto</a></li>
+        </ul>
+
+        <button class="btn btn-primary" aria-label="Acceder a la tienda">
+          Acceder a Tienda
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" role="main">
+
+    <!-- Hero Section -->
+    <section class="hero landmark-hero" role="region" aria-label="Sección destacada de cobertura">
+      <div class="hero-container">
+        <a href="/" class="breadcrumb-link">Inicio</a>
+        <h1 class="hero-headline">Entrega Garantizada en {landmark.name}</h1>
+        <p class="hero-subheadline">{landmark.description}</p>
+        <p class="delivery-time">⏱️ Entrega en {landmark.deliveryTime}</p>
+        <a href="#contacto" class="btn btn-primary btn-lg">Solicitar Entrega</a>
+      </div>
+    </section>
+
+    <!-- Info Grid -->
+    <section class="landmark-info" role="region" aria-label="Información de cobertura">
+      <div class="container">
+        <div class="info-grid">
+          <article class="info-card">
+            <h3>Área de Cobertura</h3>
+            <p class="stat">{landmark.coverage} km</p>
+            <p class="detail">Radio de cobertura garantizada desde {landmark.name}</p>
+          </article>
+
+          <article class="info-card">
+            <h3>Tiempo de Entrega</h3>
+            <p class="stat">{landmark.deliveryTime}</p>
+            <p class="detail">Desde tu ubicación en {landmark.name}</p>
+          </article>
+
+          <article class="info-card">
+            <h3>Población Atendida</h3>
+            <p class="stat">{landmark.population.toLocaleString()}</p>
+            <p class="detail">Personas en {landmark.name} beneficiadas</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full Description -->
+    <section class="landmark-description" role="region" aria-label="Descripción detallada de la zona">
+      <div class="container">
+        <article class="description-card">
+          <h2>Sobre {landmark.name}</h2>
+          <p>{landmark.fullDescription}</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Attractions in Landmark -->
+    <section class="landmark-attractions" role="region" aria-label="Atractivos y lugares de interés">
+      <div class="container">
+        <h2>Lugares de Interés en {landmark.name}</h2>
+        <ul class="attractions-list" role="list">
+          {landmark.attractions.map(attraction => (
+            <li role="listitem">{attraction}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Related Areas -->
+    {relatedLandmarks.length > 0 && (
+      <section class="related-landmarks" role="region" aria-label="Zonas de cobertura relacionadas">
+        <div class="container">
+          <h2>Otras Zonas de Cobertura Cercanas</h2>
+          <div class="related-grid">
+            {relatedLandmarks.map(related => (
+              <article class="related-card">
+                <h3>
+                  <a href={`/cobertura/${related.slug}`}>{related.name}</a>
+                </h3>
+                <p>{related.description}</p>
+                <p class="delivery-info">
+                  <small>Entrega: {related.deliveryTime}</small>
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA Section -->
+    <section class="landmark-cta" role="region" aria-label="Llamada a la acción">
+      <div class="cta-container">
+        <h2>¿Necesitas Pure24 en {landmark.name}?</h2>
+        <p>Entrega garantizada en tu ubicación. Suplementación de grado farmacéutico para tu recuperación, hidratación e inmunidad.</p>
+        <a href="#contacto" class="btn btn-primary btn-lg">Solicitar Ahora</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer role="contentinfo" class="footer">
+    <div class="footer-container">
+      <p>&copy; 2025 Pure 24 Nutrition. Todos los derechos reservados.</p>
+      <p>Cobertura de entrega garantizada en Punta Arenas.</p>
+    </div>
+  </footer>
+
+  <style>
+    .landmark-hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .breadcrumb-link {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .delivery-time {
+      font-size: 1.1rem;
+      margin: 15px 0;
+      opacity: 0.95;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
+
+    .info-card {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+      margin: 10px 0;
+    }
+
+    .detail {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .description-card {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin: 40px 0;
+    }
+
+    .attractions-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      list-style: none;
+      padding: 0;
+      margin: 30px 0;
+    }
+
+    .attractions-list li {
+      background: #f8f9fa;
+      padding: 15px;
+      border-left: 4px solid #667eea;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+
+    .related-card {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .related-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .related-card h3 {
+      margin-top: 0;
+    }
+
+    .related-card a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .related-card a:hover {
+      text-decoration: underline;
+    }
+
+    .delivery-info {
+      color: #667eea;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .landmark-cta {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .cta-container h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+  </style>
+</body>
+</html>

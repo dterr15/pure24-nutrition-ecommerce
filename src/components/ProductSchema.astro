@@ -1,0 +1,112 @@
+---
+// src/components/ProductSchema.astro
+// Componente que genera JSON-LD dinámico para Product Schema
+// Pure 24 Nutrition - FASE 2: GEO & AI OPTIMIZATION
+
+export interface Product {
+  name: string;
+  description: string;
+  sku: string;
+  gtin13?: string;
+  mpn?: string;
+  price: number;
+  priceCurrency?: string;
+  priceValidUntil?: string;
+  availability?: 'InStock' | 'OutOfStock' | 'PreOrder';
+  image: string[];
+  url: string;
+  brand?: string;
+  ratingValue?: number;
+  reviewCount?: number;
+  shippingCost?: number;
+  shippingCurrency?: string;
+}
+
+interface Props {
+  product: Product;
+  siteUrl?: string;
+}
+
+const {
+  product,
+  siteUrl = 'https://pure24nutrition.cl'
+} = Astro.props;
+
+// Validar campos requeridos
+if (!product.name || !product.price || !product.image.length) {
+  throw new Error('Product schema requires: name, price, image');
+}
+
+// Establecer valores por defecto
+const {
+  name,
+  description,
+  sku,
+  gtin13,
+  mpn,
+  price,
+  priceCurrency = 'CLP',
+  priceValidUntil,
+  availability = 'InStock',
+  image,
+  url,
+  brand = 'Pure 24 Nutrition',
+  ratingValue,
+  reviewCount,
+  shippingCost = 3500,
+  shippingCurrency = 'CLP'
+} = product;
+
+// Construir JSON-LD Schema
+const productSchema = {
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": name,
+  "image": image,
+  "description": description,
+  "sku": sku,
+  ...(gtin13 && { "gtin13": gtin13 }),
+  ...(mpn && { "mpn": mpn }),
+  "brand": {
+    "@type": "Brand",
+    "name": brand
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": url,
+    "priceCurrency": priceCurrency,
+    "price": price.toString(),
+    ...(priceValidUntil && { "priceValidUntil": priceValidUntil }),
+    "availability": `https://schema.org/${availability}`,
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": shippingCost.toString(),
+        "currency": shippingCurrency
+      },
+      "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "CL"
+      }
+    },
+    "seller": {
+      "@type": "Organization",
+      "name": brand,
+      "url": siteUrl
+    }
+  },
+  ...(ratingValue && reviewCount && {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": ratingValue,
+      "reviewCount": reviewCount
+    }
+  })
+};
+
+// Convertir a JSON string
+const schemaJson = JSON.stringify(productSchema);
+---
+
+<script type="application/ld+json" set:html={schemaJson} />

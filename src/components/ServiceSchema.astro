@@ -1,0 +1,47 @@
+---
+// src/components/ServiceSchema.astro
+// Schema Service para cada servicio/producto de Pure24
+// Utilizar en páginas de categoría (Recuperación, Hidratación, Inmunidad)
+
+export interface Service {
+  name: string;
+  description: string;
+  serviceType?: string;
+  areaServed?: string;
+  priceRange?: string;
+  url?: string;
+}
+
+interface Props {
+  service: Service;
+  siteUrl?: string;
+}
+
+const {
+  service,
+  siteUrl = 'https://pure24nutrition.cl'
+} = Astro.props;
+
+const serviceSchema = {
+  "@context": "https://schema.org/",
+  "@type": "Service",
+  "name": service.name,
+  "description": service.description,
+  ...(service.serviceType && { "serviceType": service.serviceType }),
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "Pure 24 Nutrition",
+    "url": siteUrl
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": service.areaServed || "CL"
+  },
+  ...(service.priceRange && { "priceRange": service.priceRange }),
+  ...(service.url && { "url": service.url })
+};
+
+const schemaJson = JSON.stringify(serviceSchema);
+---
+
+<script type="application/ld+json" set:html={schemaJson} />

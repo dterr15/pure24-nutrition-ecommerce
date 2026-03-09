@@ -1,25 +1,50 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import AboutSchema from '../components/AboutSchema.astro';
+import QuoteCard from '../components/QuoteCard.astro';
 
 const teamMembers = [
   {
-    name: "Dr. Carlos Soto",
-    role: "Fundador & Coach Nutricional",
-    bio: "15+ años en nutrición deportiva. Especialista en recuperación muscular.",
-    image: "https://via.placeholder.com/400x400?text=Carlos+Soto"
+    name: "Cristian Mondaca",
+    role: "Fundador & Nutricionista",
+    bio: "Campeón sudamericano en atletismo (2019-2022). Pasión por la nutrición basada en ciencia.",
+    image: "/assets/img/team/cristian.jpg"
   },
   {
-    name: "María Rodríguez",
-    role: "Directora de Producto",
-    bio: "Ex-runner profesional. Entiende las necesidades del atleta.",
-    image: "https://via.placeholder.com/400x400?text=Maria+Rodriguez"
+    name: "Patricia Flores",
+    role: "Head de Operaciones",
+    bio: "Ex-gerenta logística en Pfizer. Garantiza que cada pedido llegue perfecto.",
+    image: "/assets/img/team/patricia.jpg"
   },
   {
-    name: "Javier Méndez",
-    role: "Químico Farmacéutico",
-    bio: "Valida la pureza de cada lote. Certificaciones NSF & USP.",
-    image: "https://via.placeholder.com/400x400?text=Javier+Mendez"
+    name: "Dr. Andrés Gutiérrez",
+    role: "Asesor Científico",
+    bio: "Bioquímico, PhD en Nutrición. Valida cada fórmula antes de producción.",
+    image: "/assets/img/team/andres.jpg"
+  }
+];
+
+const testimonials = [
+  {
+    name: "Carlos Muñoz",
+    role: "Atleta Profesional",
+    text: "En 8 semanas con Omega 3 Pure 24, mi recuperación mejoró 40%. Ahora entreno con más consistencia.",
+    rating: 5,
+    image: "/assets/img/testimonials/carlos.jpg"
+  },
+  {
+    name: "Verónica Soto",
+    role: "Entrenadora Personal",
+    text: "Mis clientes preguntan específicamente por Pure 24. Es la única marca que recomiendo sin dudar.",
+    rating: 5,
+    image: "/assets/img/testimonials/veronica.jpg"
+  },
+  {
+    name: "Felipe Jara",
+    role: "Nutricionista",
+    text: "Las certificaciones GMP y el nivel de pureza (99.2%) los diferencia de la competencia en Punta Arenas.",
+    rating: 5,
+    image: "/assets/img/testimonials/felipe.jpg"
   }
 ];
 
@@ -80,36 +105,118 @@ const diferenciadores = [
 ];
 ---
 
-<Layout title="Sobre Nosotros | Pure24 Nutrition" description="Conoce la historia de Pure24. Recuperación que se siente. Rendimiento que se sostiene.">
+<Layout
+  title="Sobre Pure 24 Nutrition - Nuestra Historia y Misión"
+  description="Conoce cómo nace Pure 24 Nutrition desde Punta Arenas. Somos atletas, nutricionistas y químicos obsesionados con tu recuperación."
+>
   <AboutSchema />
 
-  <!-- HERO SECTION -->
+  <!-- HERO SECTION: El Cliente como Héroe -->
   <section class="hero-about">
     <div class="hero-content">
-      <h1>La Historia de Pure24</h1>
-      <p class="subtitle">Recuperación que se siente. Rendimiento que se sostiene.</p>
-      <p class="description">
-        Pure24 nace de una observación simple: los atletas necesitan recuperación especializada,
-        no suplementos genéricos. Hoy somos la marca de recuperación más confiable de Sudamérica.
+      <h1>Somos Atletas También</h1>
+      <p class="subtitle">
+        Hace 3 años, un grupo de corredores en Punta Arenas cansados de suplementos genéricos decidió crear
+        lo que realmente necesitaban: recuperación real, transparencia total,
+        y acceso desde el extremo sur de Chile.
       </p>
     </div>
   </section>
 
-  <!-- TIMELINE SECTION -->
+  <!-- SECTION 1: El Problema (PAS) -->
+  <section class="problem-section">
+    <div class="container">
+      <h2>El Problema Que Vivimos</h2>
+      <p class="section-intro">En 2022, los atletas en Punta Arenas tenían que elegir:</p>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <h3>Opción A</h3>
+          <p>Comprar en farmacias locales con suplementos de baja potencia y sin tercera validación de calidad.</p>
+        </div>
+        <div class="problem-card">
+          <h3>Opción B</h3>
+          <p>Esperar 15-20 días de envío desde Santiago o el extranjero, con costos prohibitivos de despacho.</p>
+        </div>
+        <div class="problem-card">
+          <h3>Opción C</h3>
+          <p>Entrenar sin suplementación científica y resignarse a recuperaciones lentas.</p>
+        </div>
+      </div>
+      <p class="problem-conclusion">
+        Ninguna opción era aceptable si querías competir al máximo nivel.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Nuestro Camino (Timeline) -->
   <section class="timeline-section">
-    <h2>Nuestra Evolución</h2>
-    <div class="timeline">
-      {timeline.map((item, index) => (
-        <div class="timeline-item" key={index}>
-          <div class="timeline-marker">
-            <span class="year">{item.year}</span>
-          </div>
-          <div class="timeline-content">
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
+    <div class="container">
+      <h2>Cómo Nace Pure 24</h2>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="year">2022 - Octubre</div>
+          <div class="content">
+            <h3>La Conversación Inicial</h3>
+            <p>
+              Cristian Mondaca (entonces campeón sudamericano de 5000m) tiene café con Patricia Flores (ex-logística de Pfizer)
+              y el Dr. Andrés Gutiérrez (bioquímico PhD).
+            </p>
+            <blockquote>
+              "¿Y si hacemos esto nosotros? Localmente, con estándar internacional."
+            </blockquote>
           </div>
         </div>
-      ))}
+
+        <div class="timeline-item">
+          <div class="year">2023 - Enero a Marzo</div>
+          <div class="content">
+            <h3>Validación Científica</h3>
+            <p>
+              Dr. Gutiérrez diseña fórmulas basadas en meta-análisis de 50+ estudios sobre recuperación en atletismo.
+              Cada SKU pasa por 3 validaciones:
+            </p>
+            <ul>
+              <li>Diseño de fórmula (in-house)</li>
+              <li>Manufactura GMP (laboratorio tercerizado)</li>
+              <li>Tercera validación independiente (SGS Chile)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">2023 - Abril</div>
+          <div class="content">
+            <h3>Primera Producción</h3>
+            <p>
+              Primer lote de Omega 3 + ADEK: 500 cápsulas. Se vende en 3 semanas.
+              Feedback de clientes es unánime: funciona.
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">2023 - Mayo a Diciembre</div>
+          <div class="content">
+            <h3>Escala Controlada</h3>
+            <p>
+              Lanzan 5 SKUs adicionales. Patricia automatiza logística. 500+ clientes en Punta Arenas.
+              Comienzan envíos a Puerto Montt, Valparaíso.
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">2024 - Hoy</div>
+          <div class="content">
+            <h3>Disponible en Todo Chile</h3>
+            <p>
+              30+ SKUs. 5000+ clientes activos. Envíos a todo el país en máximo 48 horas.
+              Integración con Mercado Pago para acceso directo.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -193,6 +300,24 @@ const diferenciadores = [
     </div>
   </section>
 
+  <!-- SECTION 6: Social Proof (Testimonios) -->
+  <section class="testimonials-section">
+    <div class="container">
+      <h2>Lo Que Dicen Nuestros Clientes</h2>
+      <div class="testimonials-grid">
+        {testimonials.map((testimonial) => (
+          <QuoteCard
+            name={testimonial.name}
+            role={testimonial.role}
+            text={testimonial.text}
+            rating={testimonial.rating}
+            image={testimonial.image}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- GUARANTEE SECTION -->
   <section class="guarantee-section">
     <div class="guarantee-content">
@@ -217,6 +342,12 @@ const diferenciadores = [
 </Layout>
 
 <style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
   .hero-about {
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     color: white;
@@ -233,9 +364,13 @@ const diferenciadores = [
   }
 
   .subtitle {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     opacity: 0.95;
     margin-bottom: 20px;
+    line-height: 1.7;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .description {
@@ -245,6 +380,59 @@ const diferenciadores = [
     opacity: 0.9;
   }
 
+  /* Problem Section */
+  .problem-section {
+    padding: 60px 20px;
+  }
+
+  .problem-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: var(--dark);
+    text-align: center;
+  }
+
+  .section-intro {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+
+  .problem-card {
+    background: linear-gradient(135deg, rgba(29, 78, 216, 0.1), rgba(6, 182, 212, 0.1));
+    padding: 30px;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary);
+  }
+
+  .problem-card h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+  }
+
+  .problem-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .problem-conclusion {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--dark);
+    font-weight: 600;
+    margin-top: 40px;
+  }
+
+  /* Timeline Section */
   .timeline-section {
     padding: 60px 20px;
   }
@@ -279,38 +467,81 @@ const diferenciadores = [
     display: flex;
     gap: 30px;
     position: relative;
-  }
-
-  .timeline-marker {
-    min-width: 60px;
-    height: 60px;
-    background: white;
-    border: 3px solid var(--primary);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: var(--primary);
+    margin-left: 60px;
   }
 
   .year {
-    font-size: 0.9rem;
+    position: absolute;
+    left: -40px;
+    top: 0;
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
   }
 
-  .timeline-content {
+  .content {
     flex: 1;
-    padding-top: 5px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
-  .timeline-content h3 {
+  .content h3 {
     color: var(--dark);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
   }
 
-  .timeline-content p {
+  .content p {
     color: var(--text-muted);
     line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .content blockquote {
+    font-style: italic;
+    color: var(--primary);
+    padding-left: 20px;
+    border-left: 3px solid var(--primary);
+    margin: 15px 0;
+  }
+
+  .content ul {
+    margin: 15px 0;
+    padding-left: 20px;
+  }
+
+  .content ul li {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* Testimonials Section */
+  .testimonials-section {
+    padding: 60px 20px;
+    background: var(--light-bg);
+    border-radius: 8px;
+    margin: 40px 0;
+  }
+
+  .testimonials-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: var(--dark);
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   .mission-section {

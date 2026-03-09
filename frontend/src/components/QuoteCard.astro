@@ -1,0 +1,101 @@
+---
+interface Props {
+  name: string
+  role: string
+  text: string
+  rating: number
+  image: string
+}
+
+const { name, role, text, rating, image } = Astro.props
+---
+
+<div class="quote-card">
+  <div class="stars">
+    {[...Array(rating)].map((_, i) => (
+      <span key={i} class="star">★</span>
+    ))}
+  </div>
+
+  <blockquote class="quote-text">
+    "{text}"
+  </blockquote>
+
+  <div class="quote-author">
+    <img
+      src={image}
+      alt={name}
+      loading="lazy"
+      class="author-image"
+    />
+    <div class="author-info">
+      <div class="author-name">{name}</div>
+      <div class="author-role">{role}</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .quote-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--secondary);
+  }
+
+  .quote-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+  }
+
+  .stars {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+
+  .star {
+    color: var(--secondary);
+    font-size: 1.3rem;
+  }
+
+  .quote-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--dark);
+    margin: 0 0 25px 0;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .quote-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .author-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--secondary);
+  }
+
+  .author-info {
+    flex: 1;
+  }
+
+  .author-name {
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 0.95rem;
+  }
+
+  .author-role {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+</style>

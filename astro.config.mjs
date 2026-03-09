@@ -1,7 +1,11 @@
 import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
 import path from 'path';
 
 export default defineConfig({
+  // Integrations
+  integrations: [react()],
+
   // Root directory configuration
   srcDir: './frontend/src',
   outDir: './dist',

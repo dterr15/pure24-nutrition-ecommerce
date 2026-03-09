@@ -1,0 +1,770 @@
+---
+// [slug].astro - Product Detail Page (SSG)
+// Generates 12 static product pages at build time
+// Schema.org Product + Breadcrumb for SEO
+
+import Layout from '../../layouts/Layout.astro';
+import { getProducts } from '../../lib/payload-client';
+import type { Product } from '../../lib/payload-client';
+
+export async function getStaticPaths() {
+  const products = await getProducts();
+  console.log(`[BUILD] Found ${products.length} products for SSG`);
+
+  if (products.length === 0) {
+    console.warn('[BUILD] WARNING: No products found! Check getProducts()');
+  }
+
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+
+// Get related products (same category, max 3)
+const allProducts = await getProducts();
+const related = allProducts
+  .filter((p) => p.category === product.category && p.id !== product.id)
+  .slice(0, 3);
+
+// Page metadata
+const title = `${product.name} | Pure24 Nutrition`;
+const description = product.description.substring(0, 155);
+const productUrl = `https://pure24nutrition.cl/productos/${product.slug}`;
+
+// Calculate discount
+const hasDiscount =
+  product.discountedPrice &&
+  product.discountedPrice < product.price;
+const discount = hasDiscount
+  ? Math.round(
+      ((product.price - product.discountedPrice!) / product.price) * 100
+    )
+  : 0;
+
+// Product Schema.org JSON-LD
+const productSchema = {
+  '@context': 'https://schema.org/',
+  '@type': 'Product',
+  'name': product.name,
+  'description': product.description,
+  'sku': product.sku,
+  'brand': {
+    '@type': 'Brand',
+    'name': 'Pure24 Nutrition',
+  },
+  'offers': {
+    '@type': 'Offer',
+    'url': productUrl,
+    'priceCurrency': 'CLP',
+    'price': (product.discountedPrice || product.price).toString(),
+    'priceValidUntil': new Date(
+      Date.now() + 30 * 24 * 60 * 60 * 1000
+    )
+      .toISOString()
+      .split('T')[0],
+    'availability':
+      product.stock > 0
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+    'seller': {
+      '@type': 'Organization',
+      'name': 'Pure24 Nutrition',
+    },
+    'shippingDetails': {
+      '@type': 'OfferShippingDetails',
+      'shippingRate': {
+        '@type': 'MonetaryAmount',
+        'currency': 'CLP',
+        'value': '3000',
+      },
+      'shippingDestination': {
+        '@type': 'DefinedRegion',
+        'addressCountry': 'CL',
+      },
+      'deliveryTime': {
+        '@type': 'ShippingDeliveryTime',
+        'handlingTime': {
+          '@type': 'QuantitativeValue',
+          'minValue': 0,
+          'maxValue': 1,
+          'unitCode': 'DAY',
+        },
+        'transitTime': {
+          '@type': 'QuantitativeValue',
+          'minValue': 1,
+          'maxValue': 2,
+          'unitCode': 'DAY',
+        },
+      },
+    },
+  },
+};
+
+// Breadcrumb Schema
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': 'Inicio',
+      'item': 'https://pure24nutrition.cl',
+    },
+    {
+      '@type': 'ListItem',
+      'position': 2,
+      'name': 'Productos',
+      'item': 'https://pure24nutrition.cl/productos',
+    },
+    {
+      '@type': 'ListItem',
+      'position': 3,
+      'name': product.name,
+      'item': productUrl,
+    },
+  ],
+};
+---
+
+<Layout title={title}>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="product" />
+  <meta property="og:url" content={productUrl} />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href={productUrl} />
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(productSchema)}
+  />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(breadcrumbSchema)}
+  />
+
+  <!-- Breadcrumb Navigation -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="breadcrumb-container">
+      <ol>
+        <li>
+          <a href="/">Inicio</a>
+        </li>
+        <li>
+          <a href="/productos">Productos</a>
+        </li>
+        <li aria-current="page">{product.name}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Product Detail -->
+  <article class="product-detail">
+    <div class="product-layout">
+      <!-- Product Image Section -->
+      <div class="product-image-section">
+        {product.mainImage ? (
+          <img
+            src={product.mainImage.url}
+            alt={`${product.name} - Suplemento Pure24 Nutrition`}
+            width="600"
+            height="600"
+            loading="eager"
+          />
+        ) : (
+          <div class="image-placeholder">
+            <span>{product.name}</span>
+          </div>
+        )}
+        {discount > 0 && <div class="discount-tag">-{discount}%</div>}
+      </div>
+
+      <!-- Product Info Section -->
+      <div class="product-info-section">
+        {product.category && (
+          <span class="category-badge">{product.category}</span>
+        )}
+
+        <h1>{product.name}</h1>
+        <p class="product-sku">SKU: {product.sku}</p>
+
+        <!-- Price Block -->
+        <div class="price-block">
+          {hasDiscount ? (
+            <>
+              <span class="price-original">
+                ${product.price.toLocaleString('es-CL')}
+              </span>
+              <span class="price-current">
+                ${product.discountedPrice!.toLocaleString('es-CL')}
+              </span>
+              <span class="price-save">
+                Ahorras ${(product.price - product.discountedPrice!).toLocaleString(
+                  'es-CL'
+                )}
+              </span>
+            </>
+          ) : (
+            <span class="price-current">
+              ${product.price.toLocaleString('es-CL')}
+            </span>
+          )}
+        </div>
+
+        <!-- Stock Status -->
+        <div class="stock-status">
+          {product.stock > 10 ? (
+            <span class="in-stock">
+              En stock — Despacho en 1-2 días hábiles
+            </span>
+          ) : product.stock > 0 ? (
+            <span class="low-stock">
+              Últimas {product.stock} unidades
+            </span>
+          ) : (
+            <span class="out-of-stock">Temporalmente agotado</span>
+          )}
+        </div>
+
+        <!-- Description -->
+        <div class="product-description">
+          <p>{product.description}</p>
+        </div>
+
+        <!-- Specifications -->
+        {product.specifications && (
+          <div class="specs-block">
+            <h3>Especificaciones</h3>
+            <dl>
+              {product.specifications.servingSize && (
+                <>
+                  <dt>Porción</dt>
+                  <dd>{product.specifications.servingSize}</dd>
+                </>
+              )}
+              {product.specifications.ingredientAmount && (
+                <>
+                  <dt>Ingrediente activo</dt>
+                  <dd>{product.specifications.ingredientAmount}</dd>
+                </>
+              )}
+            </dl>
+          </div>
+        )}
+
+        <!-- Tags -->
+        {product.tags && product.tags.length > 0 && (
+          <div class="tags-block">
+            {product.tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )}
+
+        <!-- Buy Section -->
+        <div class="buy-section">
+          <button
+            class="btn-buy"
+            data-sku={product.sku}
+            data-name={product.name}
+            data-price={product.discountedPrice || product.price}
+            disabled={product.stock === 0}
+          >
+            {product.stock === 0
+              ? 'Agotado'
+              : `Comprar — $${(product.discountedPrice || product.price).toLocaleString(
+                  'es-CL'
+                )}`}
+          </button>
+          <p class="shipping-note">
+            Envío gratis en Punta Arenas sobre $20.000
+          </p>
+        </div>
+
+        <!-- Trust Signals -->
+        <div class="trust-signals">
+          <div class="trust-item">
+            <strong>Ingredientes verificados</strong>
+            <span>Respaldo científico publicado</span>
+          </div>
+          <div class="trust-item">
+            <strong>Despacho rápido</strong>
+            <span>1-2 días hábiles en Punta Arenas</span>
+          </div>
+          <div class="trust-item">
+            <strong>Formulación transparente</strong>
+            <span>Sin mezclas propietarias</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Products -->
+  {related.length > 0 && (
+    <section class="related-products">
+      <div class="related-container">
+        <h2>También te puede interesar</h2>
+        <div class="related-grid">
+          {related.map((p) => (
+            <a href={`/productos/${p.slug}`} class="related-card">
+              <h3>{p.name}</h3>
+              <p class="related-price">
+                ${(p.discountedPrice || p.price).toLocaleString('es-CL')}
+              </p>
+              <span class="related-category">{p.category}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <script>
+    document.querySelector('.btn-buy')?.addEventListener('click', async (e) => {
+      const btn = e.target as HTMLButtonElement;
+      const sku = btn.dataset.sku;
+      const name = btn.dataset.name;
+      const price = parseInt(btn.dataset.price || '0');
+
+      btn.disabled = true;
+      btn.textContent = 'Procesando...';
+
+      try {
+        // Try to create MP preference via n8n webhook
+        const res = await fetch('/api/create-preference', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sku, quantity: 1 }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.preferenceUrl) {
+            window.location.href = data.preferenceUrl;
+            return;
+          }
+        }
+
+        throw new Error('No preference URL');
+      } catch {
+        // Fallback: add to cart locally
+        const cart = JSON.parse(
+          localStorage.getItem('pure24-cart') || '[]'
+        );
+        const existing = cart.find(
+          (item: any) => item.sku === sku
+        );
+
+        if (existing) {
+          existing.quantity += 1;
+        } else {
+          cart.push({ sku, name, price, quantity: 1 });
+        }
+
+        localStorage.setItem('pure24-cart', JSON.stringify(cart));
+        btn.textContent = '✓ Agregado al carrito';
+        btn.classList.add('added');
+
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = `Comprar — $${price.toLocaleString(
+            'es-CL'
+          )}`;
+          btn.classList.remove('added');
+        }, 2000);
+      }
+    });
+  </script>
+</Layout>
+
+<style>
+  .breadcrumb {
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 0;
+  }
+
+  .breadcrumb-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .breadcrumb ol {
+    display: flex;
+    list-style: none;
+    gap: 8px;
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+    padding: 0;
+  }
+
+  .breadcrumb li:not(:last-child)::after {
+    content: '/';
+    margin-left: 8px;
+    color: #d1d5db;
+  }
+
+  .breadcrumb a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--primary-dark);
+  }
+
+  .breadcrumb [aria-current] {
+    color: #1f2937;
+    font-weight: 500;
+  }
+
+  .product-detail {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .product-image-section {
+    position: relative;
+    background: #f3f4f6;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-placeholder {
+    padding: 40px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .discount-tag {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #dc2626;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .product-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .category-badge {
+    display: inline-block;
+    width: fit-content;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--primary);
+    background: var(--primary-lighter);
+    padding: 4px 12px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0;
+    color: #1f2937;
+  }
+
+  .product-sku {
+    font-size: 13px;
+    color: #9ca3af;
+    margin: 0;
+  }
+
+  .price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .price-original {
+    text-decoration: line-through;
+    color: #9ca3af;
+    font-size: 18px;
+  }
+
+  .price-current {
+    font-size: 32px;
+    font-weight: 900;
+    color: #1f2937;
+  }
+
+  .price-save {
+    font-size: 14px;
+    color: #16a34a;
+    font-weight: 600;
+    background: #f0fdf4;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .stock-status {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .in-stock {
+    color: #16a34a;
+  }
+
+  .low-stock {
+    color: #d97706;
+  }
+
+  .out-of-stock {
+    color: #dc2626;
+  }
+
+  .product-description p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #4b5563;
+    margin: 0;
+  }
+
+  .specs-block {
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .specs-block h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6b7280;
+    margin-bottom: 12px;
+    margin-top: 0;
+  }
+
+  .specs-block dl {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .specs-block dt {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 14px;
+  }
+
+  .specs-block dd {
+    color: #4b5563;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .tags-block {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 12px;
+    padding: 4px 10px;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 4px;
+  }
+
+  .buy-section {
+    margin-top: 8px;
+  }
+
+  .btn-buy {
+    width: 100%;
+    padding: 16px 32px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-buy:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(29, 78, 216, 0.3);
+  }
+
+  .btn-buy:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+  }
+
+  .btn-buy.added {
+    background: #16a34a;
+  }
+
+  .shipping-note {
+    font-size: 13px;
+    color: #6b7280;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+
+  .trust-signals {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .trust-item {
+    text-align: center;
+    padding: 12px 8px;
+    background: #f9fafb;
+    border-radius: 8px;
+  }
+
+  .trust-item strong {
+    display: block;
+    font-size: 13px;
+    color: #1f2937;
+    margin-bottom: 2px;
+  }
+
+  .trust-item span {
+    font-size: 11px;
+    color: #6b7280;
+  }
+
+  .related-products {
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    padding: 60px 20px;
+  }
+
+  .related-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .related-products h2 {
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+    color: #1f2937;
+    margin-top: 0;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .related-card {
+    display: block;
+    padding: 24px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .related-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .related-card h3 {
+    font-size: 15px;
+    color: #1f2937;
+    margin-bottom: 8px;
+    margin-top: 0;
+  }
+
+  .related-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+    margin-top: 0;
+  }
+
+  .related-category {
+    font-size: 12px;
+    color: var(--primary);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .price-current {
+      font-size: 26px;
+    }
+
+    .trust-signals {
+      grid-template-columns: 1fr;
+    }
+
+    .specs-block dl {
+      grid-template-columns: 1fr;
+    }
+
+    .related-products {
+      padding: 40px 20px;
+    }
+  }
+</style>

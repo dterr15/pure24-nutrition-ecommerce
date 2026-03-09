@@ -1,6 +1,11 @@
 import { defineConfig } from 'astro/config';
+import path from 'path';
 
 export default defineConfig({
+  // Root directory configuration
+  srcDir: './frontend/src',
+  outDir: './dist',
+
   // Configuración general
   site: 'https://pure24nutrition.cl',
 
@@ -11,6 +16,11 @@ export default defineConfig({
   vite: {
     build: {
       minify: false,
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve('./frontend/src'),
+      },
     },
   },
 

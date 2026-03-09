@@ -55,7 +55,10 @@
       "Bash(pip install openpyxl)",
       "Bash(\"C:/Users/danie/AppData/Local/Programs/Python/Python313/python.exe\":*)",
       "Bash(gh repo create pure24-nutrition-ecommerce --source=. --remote=origin --push --public --description \"Pure24 Nutrition E-commerce | Astro + Payload CMS + PostgreSQL + Docker\")",
-      "Bash(winget install GitHub.cli)"
+      "Bash(winget install GitHub.cli)",
+      "Bash(npm run build 2)",
+      "Bash(1)",
+      "Bash(node -e \":*)"
     ]
   }
 }

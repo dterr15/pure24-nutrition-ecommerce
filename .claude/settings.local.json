@@ -53,7 +53,9 @@
       "Bash(python -m pip install openpyxl --quiet)",
       "Bash(python:*)",
       "Bash(pip install openpyxl)",
-      "Bash(\"C:/Users/danie/AppData/Local/Programs/Python/Python313/python.exe\":*)"
+      "Bash(\"C:/Users/danie/AppData/Local/Programs/Python/Python313/python.exe\":*)",
+      "Bash(gh repo create pure24-nutrition-ecommerce --source=. --remote=origin --push --public --description \"Pure24 Nutrition E-commerce | Astro + Payload CMS + PostgreSQL + Docker\")",
+      "Bash(winget install GitHub.cli)"
     ]
   }
 }

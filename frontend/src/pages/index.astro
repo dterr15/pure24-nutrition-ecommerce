@@ -1,0 +1,572 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
+import FAQSchema from '../components/FAQSchema.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getProducts } from '../lib/payload-client';
+
+// Get products for showcase
+const products = await getProducts();
+const featuredProducts = products.slice(0, 3);
+
+// Page metadata
+const title = "Pure24 Nutrition | Suplementos de Recuperación Deportiva";
+const description = "Recuperación que se siente. Rendimiento que se sostiene. Suplementos científicos para atletas que buscan recuperación rápida y consistencia.";
+const keywords = "suplementos recuperación deportiva, omega 3 punta arenas, magnesio deportistas, vitamina D3 K2, creatina HCL, beta alanina";
+---
+
+<Layout title={title}>
+  <!-- LocalBusiness Schema -->
+  <LocalBusinessSchema />
+
+  <!-- FAQPage Schema -->
+  <FAQSchema />
+
+  <!-- Meta tags for SEO -->
+  <meta name="description" content={description} />
+  <meta name="keywords" content={keywords} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pure24nutrition.cl" />
+  <meta name="robots" content="index, follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="badge">Suplementación científica de recuperación</div>
+      <h1>Recuperación que se siente.<br />Rendimiento que se sostiene.</h1>
+      <p class="hero-subtitle">
+        En Pure24, comprendemos que la recuperación no es un lujo, es donde ocurre el crecimiento real.
+        Nuestros protocolos de recuperación están diseñados para reducir el tiempo entre sesiones y maximizar
+        los resultados de tu entrenamiento.
+      </p>
+      <div class="cta-buttons">
+        <button class="btn btn-primary">Ver protocolos de recuperación</button>
+        <button class="btn btn-secondary">Conocer la ciencia detrás</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value Proposition -->
+  <section class="value-prop">
+    <h2>¿Por qué Pure24?</h2>
+    <div class="value-grid">
+      <div class="value-card">
+        <h3>Especialistas en recuperación</h3>
+        <p>No vendemos "suplementos genéricos". Cada producto está seleccionado específicamente para acelerar recuperación muscular, articular e inmunológica.</p>
+      </div>
+      <div class="value-card">
+        <h3>Curaduría científica real</h3>
+        <p>Certificaciones internacionales (NSF, USP, WADA), estudios peer-reviewed y transparencia total en ingredientes activos. Sin rellenos.</p>
+      </div>
+      <div class="value-card">
+        <h3>Estándar internacional</h3>
+        <p>Cumplimos con estándares de laboratorios europeos y norteamericanos. Trazabilidad completa desde manufactura hasta tu puerta.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Foundation Section (3 Pillars) -->
+  <section class="foundation">
+    <h2>La Fundación de tu Rendimiento</h2>
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-icon">💪</div>
+        <h3>Recuperación Muscular</h3>
+        <p><strong>Ventana 24-36 horas</strong></p>
+        <ul>
+          <li>Síntesis proteica óptima</li>
+          <li>Reducción de cortisol</li>
+          <li>Regeneración de glucógeno</li>
+        </ul>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">💧</div>
+        <h3>Hidratación Celular</h3>
+        <p><strong>Equilibrio osmótico perfecto</strong></p>
+        <ul>
+          <li>Balance electrolítico</li>
+          <li>Permeabilidad celular</li>
+          <li>Energía sostenida</li>
+        </ul>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">🛡️</div>
+        <h3>Soporte Inmunológico</h3>
+        <p><strong>Defensa mientras recuperas</strong></p>
+        <ul>
+          <li>Antioxidantes biodisponibles</li>
+          <li>Función de barrera</li>
+          <li>Ciclo de sueño reparador</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="featured-products">
+    <h2>Protocolos Recomendados</h2>
+    <p class="section-subtitle">Nuestros productos más solicitados por atletas de élite</p>
+    <div class="products-grid">
+      {featuredProducts.map(product => (
+        <ProductCard product={product} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="social-proof">
+    <h2>Respaldado por Resultados</h2>
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="proof-number">24-36h</div>
+        <p>Tiempo de recuperación promedio con nuestro protocolo</p>
+      </div>
+      <div class="proof-card">
+        <div class="proof-number">100%</div>
+        <p>Respaldado por ciencia, certificaciones y transparencia</p>
+      </div>
+      <div class="proof-card">
+        <div class="proof-number">1-2 días</div>
+        <p>Envío rápido a toda la Patagonia</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <h2>Lo que dicen nuestros atletas</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">
+          "Cambié mi relación con la recuperación. Antes dormía mal después del entrenamiento, ahora duermo 8 horas profundas. Mi próximo maratón va a ser mi mejor marca."
+        </p>
+        <div class="testimonial-footer">
+          <div>
+            <div class="testimonial-author">María Rodríguez</div>
+            <div class="testimonial-role">Runner, Maratón</div>
+          </div>
+          <span class="testimonial-result">-66% tiempo de recuperación</span>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <p class="testimonial-quote">
+          "Entrenamos CrossFit 5 veces a la semana. Con Pure24, mi cuerpo aguanta el ritmo, mi inmunidad está arriba y siento la diferencia real."
+        </p>
+        <div class="testimonial-footer">
+          <div>
+            <div class="testimonial-author">Javier Méndez</div>
+            <div class="testimonial-role">CrossFit Athlete</div>
+          </div>
+          <span class="testimonial-result">Mejor sueño e inmunidad</span>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <p class="testimonial-quote">
+          "Trabajo con atletas profesionales. La consistencia es todo, y Pure24 me da esa tranquilidad de que están recuperándose óptimamente todos los días."
+        </p>
+        <div class="testimonial-footer">
+          <div>
+            <div class="testimonial-author">Dr. Carlos Soto</div>
+            <div class="testimonial-role">Coach de atletismo profesional</div>
+          </div>
+          <span class="testimonial-result">4 días/semana consistentes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-closing">
+    <h2>Tu protocolo de recuperación empieza hoy</h2>
+    <p>
+      Cada hora que pase sin recuperar es una oportunidad perdida. Los atletas que alcanzan sus metas
+      no esperan. Elige tu protocolo y comienza esta semana.
+    </p>
+    <button class="btn btn-primary btn-large">Explorar protocolos</button>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq">
+    <h2>Preguntas Frecuentes</h2>
+    <div class="faq-grid">
+      <details class="faq-item">
+        <summary>¿Cuánto tiempo demora en notarse la diferencia?</summary>
+        <p>
+          La mayoría de nuestros usuarios nota mejoras en sueño y energía en la primera semana.
+          Los cambios en recuperación muscular y rendimiento se aceleran significativamente después de 3-4 semanas
+          de protocolo consistente.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>¿Son seguros para uso diario?</summary>
+        <p>
+          Sí. Todos nuestros productos cumplen con certificaciones NSF Sport®, WADA-compliant y estándares
+          internacionales de seguridad. Están diseñados para uso a largo plazo sin efectos secundarios
+          cuando se siguen las instrucciones de dosificación.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>¿Puedo combinar productos?</summary>
+        <p>
+          Absolutamente. De hecho, lo recomendamos. Nuestros protocolos están diseñados con sinergia
+          en mente. Por ejemplo, Omega 3 + Magnesio + Vitamina D3 crean un efecto sinérgico
+          en recuperación muscular y calidad de sueño.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>¿Cómo validan la pureza de los ingredientes?</summary>
+        <p>
+          Cada lote viene con certificado de análisis de laboratorio tercerista.
+          Verificamos pureza, contaminantes, potencia, y presencia exacta de ingredientes activos.
+          La transparencia total es nuestro estándar.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>¿Ofrecen garantía de satisfacción?</summary>
+        <p>
+          Sí. Si en 30 días no notás la diferencia en tu recuperación, te reembolsamos el 100%
+          sin preguntas. Pero nuestros clientes reportan cambios reales en 7-14 días.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- GA4 Event Tracking -->
+  <script>
+    // Track page view
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'page_view', {
+        page_path: '/',
+        page_title: 'Home - Pure24 Nutrition'
+      });
+    }
+  </script>
+
+  <!-- Schema.org: Organization -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Pure24 Nutrition",
+      "url": "https://pure24nutrition.cl",
+      "logo": "https://pure24nutrition.cl/logo.png",
+      "description": "Suplementos de recuperación deportiva con certificaciones internacionales",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "telephone": "+56 9 7134 5988",
+        "email": "info@pure24nutrition.cl"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Jorge Montt 934",
+        "addressLocality": "Punta Arenas",
+        "addressRegion": "Magallanes",
+        "postalCode": "6200000",
+        "addressCountry": "CL"
+      }
+    }
+  </script>
+</Layout>
+
+<style>
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .hero h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    opacity: 0.95;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Value Proposition */
+  .value-prop {
+    max-width: 1200px;
+    margin: 0 auto 80px;
+    padding: 0 20px;
+  }
+
+  .value-prop h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: var(--dark);
+  }
+
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+  }
+
+  .value-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .value-card h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+  }
+
+  /* Foundation Section */
+  .foundation {
+    background: var(--light-gray);
+    padding: 80px 20px;
+    margin-bottom: 60px;
+  }
+
+  .foundation h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: var(--dark);
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .pillar {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .pillar-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+
+  .pillar h3 {
+    color: var(--primary);
+    margin-bottom: 10px;
+  }
+
+  .pillar ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-top: 15px;
+  }
+
+  .pillar li {
+    padding: 5px 0;
+    color: var(--text-muted);
+  }
+
+  /* Featured Products */
+  .featured-products {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+  }
+
+  .featured-products h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: var(--dark);
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+  }
+
+  /* Social Proof */
+  .social-proof {
+    background: var(--primary-lighter);
+    padding: 60px 20px;
+    margin: 60px 0;
+  }
+
+  .social-proof h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: var(--dark);
+  }
+
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .proof-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .proof-number {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--primary);
+    margin-bottom: 10px;
+  }
+
+  /* CTA Closing */
+  .cta-closing {
+    background: var(--primary);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    margin: 60px 0;
+  }
+
+  .cta-closing h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+
+  .cta-closing p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .btn-large {
+    padding: 15px 50px;
+    font-size: 1.1rem;
+  }
+
+  /* FAQ Section */
+  .faq {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 0 20px;
+  }
+
+  .faq h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: var(--dark);
+  }
+
+  .faq-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .faq-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+  }
+
+  .faq-item summary {
+    font-weight: 600;
+    color: var(--primary);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .faq-item[open] summary {
+    margin-bottom: 15px;
+  }
+
+  .faq-item p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .value-prop h2,
+    .foundation h2,
+    .featured-products h2,
+    .social-proof h2,
+    .cta-closing h2,
+    .faq h2 {
+      font-size: 1.8rem;
+    }
+  }
+</style>

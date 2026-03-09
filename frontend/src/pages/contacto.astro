@@ -1,0 +1,540 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ContactSchema from '../components/ContactSchema.astro';
+
+const contactInfo = [
+  {
+    icon: "📍",
+    title: "Ubicación",
+    value: "Jorge Montt 934",
+    detail: "Punta Arenas, Región de Magallanes, Chile"
+  },
+  {
+    icon: "📞",
+    title: "Teléfono",
+    value: "+56 9 7134 5988",
+    detail: "Lunes a Viernes, 9:00 - 18:00"
+  },
+  {
+    icon: "📧",
+    title: "Email",
+    value: "info@pure24nutrition.cl",
+    detail: "Respuesta en menos de 2 horas"
+  },
+  {
+    icon: "🕐",
+    title: "Horario",
+    value: "L-V: 9:00 - 18:00",
+    detail: "Sábados: 10:00 - 14:00 (consultas especiales)"
+  }
+];
+
+const faqs = [
+  {
+    question: "¿Cuánto demora el envío?",
+    answer: "Realizamos envíos a todo Chile en 1-2 días hábiles. Regiones de Sudamérica en 5-7 días. Todos incluyen tracking incluido."
+  },
+  {
+    question: "¿Tienen puntos de venta físicos?",
+    answer: "Actualmente vendemos 100% online para garantizar frescura de productos. Pero puedes visitarnos en Jorge Montt 934, Punta Arenas, para consultas y ver el laboratorio."
+  },
+  {
+    question: "¿Puedo devolver un producto?",
+    answer: "Claro. Garantía 30 días si no estás satisfecho. Reembolso 100% sin preguntas. Solo contacta a info@pure24nutrition.cl"
+  },
+  {
+    question: "¿Son seguros para uso diario?",
+    answer: "Sí. Todos nuestros productos son NSF, USP y WADA approved. Puedes usar según dosificación recomendada sin riesgo."
+  },
+  {
+    question: "¿Tienen descuentos por volumen?",
+    answer: "Sí. Para compras de 5+ productos de la misma línea, contacta a nuestro equipo comercial. Ofertas especiales para clubs y entrenamientos."
+  }
+];
+---
+
+<Layout title="Contacto | Pure24 Nutrition" description="Ponte en contacto con Pure24. Ubicación, teléfono, email y horarios de atención.">
+  <ContactSchema />
+
+  <!-- HERO SECTION -->
+  <section class="hero-contact">
+    <h1>Estamos Aquí para Ayudarte</h1>
+    <p>¿Preguntas sobre nuestros productos? Cuéntanos cómo podemos ayudarte.</p>
+  </section>
+
+  <!-- CONTACT INFO CARDS -->
+  <section class="contact-info-section">
+    <div class="info-grid">
+      {contactInfo.map((info, index) => (
+        <div class="info-card" key={index}>
+          <div class="icon">{info.icon}</div>
+          <h3>{info.title}</h3>
+          <p class="value">{info.value}</p>
+          <p class="detail">{info.detail}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CONTACT FORM SECTION -->
+  <section class="contact-form-section">
+    <div class="form-container">
+      <h2>Envíanos un Mensaje</h2>
+      <p class="form-subtitle">Completa el formulario y nos pondremos en contacto en menos de 2 horas.</p>
+
+      <form class="contact-form" name="contact" method="POST" data-netlify="true">
+        <input type="hidden" name="form-name" value="contact" />
+
+        <div class="form-group">
+          <label for="name">Nombre Completo *</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            placeholder="Tu nombre"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="tu@email.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="phone">Teléfono</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="+56 9 XXXX XXXX"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Asunto *</label>
+          <select id="subject" name="subject" required>
+            <option value="">Selecciona un asunto</option>
+            <option value="product-info">Información de Producto</option>
+            <option value="order-status">Estado de Pedido</option>
+            <option value="return">Devolución/Garantía</option>
+            <option value="wholesale">Venta al Por Mayor</option>
+            <option value="other">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Mensaje *</label>
+          <textarea
+            id="message"
+            name="message"
+            required
+            rows="6"
+            placeholder="Cuéntanos cómo podemos ayudarte..."
+          ></textarea>
+        </div>
+
+        <div class="form-group checkbox">
+          <input
+            type="checkbox"
+            id="privacy"
+            name="privacy"
+            required
+          />
+          <label for="privacy">
+            Acepto la política de privacidad y términos de servicio *
+          </label>
+        </div>
+
+        <button type="submit" class="submit-button">Enviar Mensaje</button>
+      </form>
+    </div>
+
+    <!-- MAP SECTION -->
+    <div class="map-container">
+      <h2>Ubicación</h2>
+      <div class="map-embed">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2920.7623456789012!2d-70.90810!3d-53.16270!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sJorge%20Montt%20934%2C%20Punta%20Arenas!5e0!3m2!1ses!2scl!4v1234567890"
+          width="100%"
+          height="450"
+          style="border:0;"
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="faq-section">
+    <h2>Preguntas Frecuentes</h2>
+    <div class="faq-container">
+      {faqs.map((faq, index) => (
+        <details class="faq-item" key={index}>
+          <summary class="faq-question">
+            <span>{faq.question}</span>
+            <span class="toggle">+</span>
+          </summary>
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- PROMISE SECTION -->
+  <section class="promise-section">
+    <h2>Nuestro Compromiso Contigo</h2>
+    <div class="promise-grid">
+      <div class="promise-card">
+        <h3>⚡ Respuesta Rápida</h3>
+        <p>Respondemos en menos de 2 horas hábiles</p>
+      </div>
+      <div class="promise-card">
+        <h3>✅ Soluciones Reales</h3>
+        <p>No automatizado. Gente real resolviendo tu problema</p>
+      </div>
+      <div class="promise-card">
+        <h3>🔒 Privacidad Total</h3>
+        <p>Tus datos son seguros. Nunca compartimos información</p>
+      </div>
+      <div class="promise-card">
+        <h3>💯 Satisfacción Garantizada</h3>
+        <p>Si no estás satisfecho, lo solucionamos</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-contact {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin: 40px 0;
+  }
+
+  .hero-contact h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    font-weight: 900;
+  }
+
+  .hero-contact p {
+    font-size: 1.2rem;
+    opacity: 0.95;
+  }
+
+  .contact-info-section {
+    padding: 60px 20px;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .info-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .info-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+
+  .info-card h3 {
+    color: var(--dark);
+    margin-bottom: 10px;
+  }
+
+  .value {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+  }
+
+  .detail {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .contact-form-section {
+    background: var(--light-bg);
+    padding: 60px 20px;
+    border-radius: 8px;
+    margin: 40px 0;
+  }
+
+  .form-container {
+    max-width: 600px;
+    margin: 0 auto 60px;
+  }
+
+  .form-container h2 {
+    color: var(--dark);
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .form-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    font-size: 1rem;
+  }
+
+  .contact-form {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--dark);
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group input[type="tel"],
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-group input[type="text"]:focus,
+  .form-group input[type="email"]:focus,
+  .form-group input[type="tel"]:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+  }
+
+  .form-group.checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .form-group.checkbox input[type="checkbox"] {
+    width: auto;
+    margin-top: 4px;
+  }
+
+  .form-group.checkbox label {
+    margin-bottom: 0;
+    cursor: pointer;
+    font-weight: 400;
+  }
+
+  .submit-button {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+  }
+
+  .submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(29, 78, 216, 0.4);
+  }
+
+  .map-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .map-container h2 {
+    color: var(--dark);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .map-embed {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .faq-section {
+    padding: 60px 20px;
+  }
+
+  .faq-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: var(--dark);
+  }
+
+  .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--primary);
+    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.15);
+  }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--dark);
+    user-select: none;
+  }
+
+  .faq-question:hover {
+    background: rgba(29, 78, 216, 0.05);
+  }
+
+  .toggle {
+    font-size: 1.5rem;
+    color: var(--primary);
+    transition: transform 0.3s ease;
+  }
+
+  .faq-item[open] .toggle {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    padding: 0 20px 20px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .promise-section {
+    background: var(--light-bg);
+    padding: 60px 20px;
+    border-radius: 8px;
+    margin: 40px 0;
+  }
+
+  .promise-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: var(--dark);
+  }
+
+  .promise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .promise-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .promise-card h3 {
+    color: var(--primary);
+    margin-bottom: 10px;
+  }
+
+  .promise-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .hero-contact h1 {
+      font-size: 2rem;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .faq-section h2,
+    .promise-section h2 {
+      font-size: 1.8rem;
+    }
+  }
+</style>

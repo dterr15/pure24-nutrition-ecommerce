@@ -1,0 +1,598 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AboutSchema from '../components/AboutSchema.astro';
+
+const teamMembers = [
+  {
+    name: "Dr. Carlos Soto",
+    role: "Fundador & Coach Nutricional",
+    bio: "15+ años en nutrición deportiva. Especialista en recuperación muscular.",
+    image: "https://via.placeholder.com/400x400?text=Carlos+Soto"
+  },
+  {
+    name: "María Rodríguez",
+    role: "Directora de Producto",
+    bio: "Ex-runner profesional. Entiende las necesidades del atleta.",
+    image: "https://via.placeholder.com/400x400?text=Maria+Rodriguez"
+  },
+  {
+    name: "Javier Méndez",
+    role: "Químico Farmacéutico",
+    bio: "Valida la pureza de cada lote. Certificaciones NSF & USP.",
+    image: "https://via.placeholder.com/400x400?text=Javier+Mendez"
+  }
+];
+
+const timeline = [
+  {
+    year: "2022",
+    title: "El Inicio",
+    description: "Carlos observa atletas con recuperación deficiente. Nace la idea de Pure24."
+  },
+  {
+    year: "2023",
+    title: "Primera Fórmula",
+    description: "Desarrollo y testing de la primera combinación de suplementos."
+  },
+  {
+    year: "2024",
+    title: "Certificaciones",
+    description: "Obtiene NSF, USP y certificación WADA. Confianza total."
+  },
+  {
+    year: "2025",
+    title: "Expansión Regional",
+    description: "Llega a 5 países de Sudamérica. +10,000 atletas satisfechos."
+  }
+];
+
+const diferenciadores = [
+  {
+    icon: "🔬",
+    title: "Ciencia Pura",
+    description: "Cada fórmula validada por química farmacéutica. 0 rellenos."
+  },
+  {
+    icon: "⚡",
+    title: "Recuperación Comprobada",
+    description: "24-36 horas de recuperación vs 48-72 del promedio."
+  },
+  {
+    icon: "🛡️",
+    title: "Seguridad Total",
+    description: "NSF, USP, WADA approved. Garantía de satisfacción 30 días."
+  },
+  {
+    icon: "📊",
+    title: "Transparencia",
+    description: "Cada ingrediente con dosis exacta. Análisis públicos."
+  },
+  {
+    icon: "🌍",
+    title: "Sostenibilidad",
+    description: "Empaques 100% reciclables. Carbono neutral."
+  },
+  {
+    icon: "💚",
+    title: "Marca con Propósito",
+    description: "1% de ganancias a investigación en recuperación deportiva."
+  }
+];
+---
+
+<Layout title="Sobre Nosotros | Pure24 Nutrition" description="Conoce la historia de Pure24. Recuperación que se siente. Rendimiento que se sostiene.">
+  <AboutSchema />
+
+  <!-- HERO SECTION -->
+  <section class="hero-about">
+    <div class="hero-content">
+      <h1>La Historia de Pure24</h1>
+      <p class="subtitle">Recuperación que se siente. Rendimiento que se sostiene.</p>
+      <p class="description">
+        Pure24 nace de una observación simple: los atletas necesitan recuperación especializada,
+        no suplementos genéricos. Hoy somos la marca de recuperación más confiable de Sudamérica.
+      </p>
+    </div>
+  </section>
+
+  <!-- TIMELINE SECTION -->
+  <section class="timeline-section">
+    <h2>Nuestra Evolución</h2>
+    <div class="timeline">
+      {timeline.map((item, index) => (
+        <div class="timeline-item" key={index}>
+          <div class="timeline-marker">
+            <span class="year">{item.year}</span>
+          </div>
+          <div class="timeline-content">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- MISSION/VISION SECTION -->
+  <section class="mission-section">
+    <div class="mission-grid">
+      <div class="mission-card">
+        <h3>Nuestra Misión</h3>
+        <p>
+          Proporcionar suplementos científicamente validados que optimicen la recuperación
+          muscular y permitan a los atletas entrenar consistentemente sin lesiones.
+        </p>
+      </div>
+      <div class="mission-card">
+        <h3>Nuestra Visión</h3>
+        <p>
+          Ser la marca de referencia en recuperación deportiva en América Latina,
+          reconocida por calidad, transparencia y resultados comprobados.
+        </p>
+      </div>
+      <div class="mission-card">
+        <h3>Nuestros Valores</h3>
+        <ul>
+          <li>🔬 Ciencia antes que marketing</li>
+          <li>💼 Transparencia total</li>
+          <li>🏆 Excelencia en cada lote</li>
+          <li>💚 Propósito social</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIADORES SECTION -->
+  <section class="diferenciadores-section">
+    <h2>Por Qué Confían en Nosotros</h2>
+    <div class="diferenciadores-grid">
+      {diferenciadores.map((item, index) => (
+        <div class="diferenciador-card" key={index}>
+          <div class="icon">{item.icon}</div>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- TEAM SECTION -->
+  <section class="team-section">
+    <h2>El Equipo Detrás de Pure24</h2>
+    <div class="team-grid">
+      {teamMembers.map((member, index) => (
+        <div class="team-card" key={index}>
+          <div class="member-image">
+            <img src={member.image} alt={member.name} loading="lazy" />
+          </div>
+          <h3>{member.name}</h3>
+          <p class="role">{member.role}</p>
+          <p class="bio">{member.bio}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- STATS SECTION -->
+  <section class="stats-section">
+    <div class="stat">
+      <h3>+10,000</h3>
+      <p>Atletas satisfechos</p>
+    </div>
+    <div class="stat">
+      <h3>5</h3>
+      <p>Países en Sudamérica</p>
+    </div>
+    <div class="stat">
+      <h3>100%</h3>
+      <p>Certificaciones Obtenidas</p>
+    </div>
+    <div class="stat">
+      <h3>24-36h</h3>
+      <p>Recuperación Comprobada</p>
+    </div>
+  </section>
+
+  <!-- GUARANTEE SECTION -->
+  <section class="guarantee-section">
+    <div class="guarantee-content">
+      <h2>30 Días de Garantía</h2>
+      <p>
+        Si no sientes la diferencia en tu recuperación en los primeros 30 días,
+        te devolvemos el 100% de tu dinero. Sin preguntas.
+      </p>
+      <p class="subtitle-guarantee">
+        +10,000 atletas han probado. 98% renueva. ¿Tú serás el próximo?
+      </p>
+      <a href="/productos" class="cta-button">Ver Nuestros Productos</a>
+    </div>
+  </section>
+
+  <!-- CONTACT INVITE SECTION -->
+  <section class="contact-invite">
+    <h2>¿Preguntas?</h2>
+    <p>Nuestro equipo está disponible para ayudarte</p>
+    <a href="/contacto" class="cta-secondary">Contáctanos</a>
+  </section>
+</Layout>
+
+<style>
+  .hero-about {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin: 40px 0;
+  }
+
+  .hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    font-weight: 900;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+    opacity: 0.95;
+    margin-bottom: 20px;
+  }
+
+  .description {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.9;
+  }
+
+  .timeline-section {
+    padding: 60px 20px;
+  }
+
+  .timeline-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: var(--dark);
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 30px;
+    position: relative;
+  }
+
+  .timeline-marker {
+    min-width: 60px;
+    height: 60px;
+    background: white;
+    border: 3px solid var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: var(--primary);
+  }
+
+  .year {
+    font-size: 0.9rem;
+  }
+
+  .timeline-content {
+    flex: 1;
+    padding-top: 5px;
+  }
+
+  .timeline-content h3 {
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .timeline-content p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .mission-section {
+    background: var(--light-bg);
+    padding: 60px 20px;
+    border-radius: 8px;
+    margin: 40px 0;
+  }
+
+  .mission-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .mission-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .mission-card h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+  }
+
+  .mission-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .mission-card li {
+    margin: 10px 0;
+    color: var(--text-muted);
+  }
+
+  .diferenciadores-section {
+    padding: 60px 20px;
+  }
+
+  .diferenciadores-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: var(--dark);
+  }
+
+  .diferenciadores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .diferenciador-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .diferenciador-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+
+  .diferenciador-card h3 {
+    color: var(--dark);
+    margin-bottom: 10px;
+  }
+
+  .diferenciador-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .team-section {
+    padding: 60px 20px;
+    background: var(--light-bg);
+    border-radius: 8px;
+    margin: 40px 0;
+  }
+
+  .team-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: var(--dark);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .team-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .team-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .member-image {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    background: var(--light-bg);
+  }
+
+  .member-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .team-card h3 {
+    padding: 20px 20px 5px;
+    color: var(--dark);
+  }
+
+  .role {
+    padding: 0 20px;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .bio {
+    padding: 10px 20px 20px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border-radius: 8px;
+    margin: 40px 0;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat h3 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 900;
+  }
+
+  .stat p {
+    opacity: 0.95;
+  }
+
+  .guarantee-section {
+    background: white;
+    border: 2px solid var(--primary);
+    padding: 60px 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 40px 0;
+  }
+
+  .guarantee-section h2 {
+    color: var(--primary);
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+
+  .guarantee-section p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+
+  .subtitle-guarantee {
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 30px;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 15px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(29, 78, 216, 0.4);
+  }
+
+  .contact-invite {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--light-bg);
+    border-radius: 8px;
+    margin: 40px 0;
+  }
+
+  .contact-invite h2 {
+    color: var(--dark);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+
+  .contact-invite p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+
+  .cta-secondary {
+    display: inline-block;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 12px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .cta-secondary:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2.2rem;
+    }
+
+    .timeline::before {
+      left: 10px;
+    }
+
+    .timeline-marker {
+      min-width: 40px;
+      height: 40px;
+      font-size: 0.8rem;
+    }
+
+    .diferenciadores-section h2,
+    .team-section h2,
+    .guarantee-section h2,
+    .contact-invite h2 {
+      font-size: 1.8rem;
+    }
+
+    .stat h3 {
+      font-size: 1.8rem;
+    }
+  }
+</style>
